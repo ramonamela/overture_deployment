@@ -1,50 +1,35 @@
 #!/usr/bin/env python3
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
-import pyone
 import sys
-from enum import Enum
-from os import chmod
-from Crypto.PublicKey import RSA
 from time import sleep
 from fabric import Connection
 import paramiko
 from collections import OrderedDict
-from io import StringIO
-from pyoverture.starlifetemplate import NIC
-from pyoverture.starlifetemplate import Template
-from pyoverture.starlifetemplate import VirtualImages
-from pyoverture.starlifetemplate import Description
+from pyoverture.starlife import NIC
+from pyoverture.starlife import Template
+from pyoverture.starlife import VirtualImages
+from pyoverture.starlife import Description
+from pyoverture.starlife import CloudSession
+from pyoverture.utils import generate_rsa_keys
+from pyoverture.utils import run_command_ssh_gateway
+from pyoverture.utils import mount_nfs
 from os import environ
 
-def create_template(one, template_name, username, password, virtual_image=VirtualImages.UBUNTU1804KVM, cpu=2,
+def create_template(cloud_session, template_name, username, password, virtual_image=VirtualImages.UBUNTU1804KVM, cpu=2,
                     memory=None, cluster=Description, overwrite=False, nics=[], hostname=None, ip_forward=None,
                     automount_nfs=None, gateway_interface=None, graphics=False, ssh_public_key=None, disk_size=None):
     if not isinstance(virtual_image, VirtualImages):
         raise Exception("Unknown base image")
 
-    ## Check if a template already exists with this name
-    vm_template = one.templatepool.info(-1, -1, -1).VMTEMPLATE
-    for elem in vm_template:
-        if elem.get_NAME() == template_name:
-            if overwrite:
-                print("Erasing existant template with name \"%s\"" % (template_name), file=sys.stderr)
-                ret = one.template.delete(elem.get_ID())
-            else:
-                raise Exception("A template with name \"%s\" already exists" % (template_name))
-
-    current_machine = Template(one, template_name, virtual_image, username, password, cpu, memory, cluster,
+    current_template = Template(cloud_session, template_name, virtual_image, username, password, cpu, memory, cluster,
                                disk_size=disk_size, hostname=hostname, ip_forward=ip_forward,
                                automount_nfs=automount_nfs, ssh_public_key=ssh_public_key, additional_users=[],
                                gateway_interface=gateway_interface, automatic_update=False, graphics=graphics,
                                nics=nics)
 
-    vm_templ = current_machine.get_full_template()
-
-    print(vm_templ)
-
-    ret = one.template.allocate(vm_templ)
-    print("Created template with id %s" % (ret), file=sys.stderr)
+    ret = current_template.allocate_template(overwrite=overwrite)
+    print("Created template with id %s" % ret, file=sys.stderr)
     return ret
 
 
@@ -138,64 +123,16 @@ def instantiate_vm(one, base_template_id, base_instance_name, reset_base_image=F
         else:
             raise (e)
 
-def run_command_ssh_gateway(conn, username, ip, command):
-    constructed_command = "eval $'ssh -oStrictHostKeyChecking=no " + username + "@" + ip + \
-                          " <<\\'EOF\\'\n" + command + "\nEOF'"
-
-    max_connection_refused_retries = 10
-    connection_refused_errors = 0
-    keep_trying = True
-
-    while keep_trying:
-        print(".", end="")
-        sys.stdout.flush()
-
-        try:
-            stdout = StringIO()
-            stderr = StringIO()
-            conn.run(constructed_command, out_stream=stdout, err_stream=stderr)
-            print("")
-            return stdout.getvalue(), stderr.getvalue()
-        except paramiko.ssh_exception.NoValidConnectionsError as e:
-            if not "Unable to connect to port 22" in str(e):
-                raise (e)
-        except Exception as e:
-            stderr.seek(0)
-            stderr_string = stderr.getvalue()
-            if not "No route to host" in stderr_string:
-                if "Connection refused" in stderr_string:
-                    if connection_refused_errors < max_connection_refused_retries:
-                        connection_refused_errors += 1
-                    else:
-                        print(stdout.getvalue())
-                        print(stderr.getvalue())
-                        raise e
-                else:
-                    print(stdout.getvalue())
-                    print(stderr.getvalue())
-                    raise e
-        sleep(1)
-    print("")
-
 def apt_get_update(public_ip_login_node, private_ip_node, local_private, username="user"):
 
     print("Waiting until the machine is reachable by ssh and running secure apt get update", end="")
 
     conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
                        forward_agent=True)
-    """
-    command_to_run = "'pid=$(ps -elfa | grep apt | grep lock_is_held | grep -v grep | awk \'{ print $4 }\' | xargs -i " \
-                     "echo {});" \
-                     "while [ -e /proc/${pid} ]; do sleep 0.1; done; " \
-                     "sudo apt-get update; sudo apt-get -y --no-install-recommends install nfs-common autofs'"
-    constructed_command = "ssh -oStrictHostKeyChecking=no " + username + "@" + private_ip_node + " " + \
-                          command_to_run
-    """
+
     command_to_run = "pid=$(ps -elfa | grep apt | grep lock_is_held | grep -v grep | " \
                      "awk \\'{ print $4 }\\' | xargs -i echo {});while [[ ! -z \"${pid}\" && -e /proc/${pid} ]]; " \
                      "do sleep 0.1; done;sudo apt-get update;"
-    #constructed_command = "eval $'ssh -oStrictHostKeyChecking=no " + username + "@" + private_ip_node + \
-    #                      " <<\\'EOF\\'\n" + command_to_run + "\nEOF'"
 
     run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
     conn.close()
@@ -220,33 +157,6 @@ def install_postgres_dependencies(public_ip_login_node, private_ip_node, local_p
     run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
     conn.close()
 
-def mount_nfs(public_ip_login_node, private_ip_node, nfs_ip, nfs_mount_point, nfs_origin, local_private,
-              username="user"):
-    print("Waiting until nfs is mounted", end="")
-
-    conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
-                       forward_agent=True)
-
-    auto_direct_line = "\"" + nfs_mount_point + \
-                     "\t-rw,noatime,rsize=1048576,wsize=1048576,nolock,intr,tcp,actimeo=1800\t" + nfs_ip + ":" + \
-                     nfs_origin + "\""
-    command_to_run = "sudo mkdir -p /etc/auto.master.d\n" \
-                     "echo \"/-\t/etc/auto.direct\" | sudo tee -a /etc/auto.master.d/direct.autofs > /dev/null\n" \
-                     "echo " + auto_direct_line + " | sudo tee -a /etc/auto.direct > /dev/null\n" \
-                     "sudo /etc/init.d/autofs restart"
-    run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
-    conn.close()
-
-def generate_rsa_keys(tmp_public_key, tmp_private_key):
-    key = RSA.generate(2048)
-    with open(tmp_private_key, 'wb') as content_file:
-        chmod(tmp_private_key, 0o0600)
-        content_file.write(key.exportKey('PEM'))
-    pubkey = key.publickey()
-    with open(tmp_public_key, 'wb') as content_file:
-        content_file.write(pubkey.exportKey('OpenSSH'))
-    return pubkey.exportKey('OpenSSH').decode("utf-8")
-
 def create_machines(one, base_user, base_pass, public_ip_login_node, public_network, private_network,
                     tmp_public_key, tmp_private_key, remote_private_key, nfs_ip, nfs_dest, nfs_origin):
     ## Could not manage to import a new image into the datastore in an automated way
@@ -256,7 +166,7 @@ def create_machines(one, base_user, base_pass, public_ip_login_node, public_netw
     #  In case this must change, add an other value in the class VirtualImages
 
     ## First of all, we need to create a temporal ssh key to perform the connections to the base image
-
+    one = one.one
     create_master = False
 
     if create_master:
@@ -357,17 +267,8 @@ def create_machines(one, base_user, base_pass, public_ip_login_node, public_netw
 
     return base_song_vm_id, base_score_vm_id, base_postgres_song_vm_id, base_all_in_one_vm_id
 
-def deploy_score(one, public_ip_login_node, score_vm_id):
-    pass
-
-def deploy_song(one, public_ip_login_node, song_vm_id, postgres_song_vm_id):
-    deploy_script="VERSION=4.0.0" + \
-                  "curl " + \
-                  "\"https://artifacts.oicr.on.ca/artifactory/dcc-release/bio/overture/song-server/$VERSION/song-server-$VERSION-dist.tar.gz\" " + \
-                  "-Ls -o song-server-$VERSION-dist.tar.gz" \
-                  "tar zxvf song-server-$VERSION-dist.tar.gz"
-
 def deploy_full_test_stack(one, public_ip_login_node, base_all_in_one_vm_id, local_private, username):
+    one = one.one
     ## https://song-docs.readthedocs.io/en/develop/docker.html
     private_ip = get_private_ip(one, base_all_in_one_vm_id)
     playground_version = "1.0.0"
@@ -431,11 +332,11 @@ def main(server_address, user, password, reset_base_image=False):
     ## Due to a fabric limitation, we MUST store the private key with this name
     remote_private_key = "/home/" + base_user + "/.ssh/id_rsa"
 
-    one = pyone.OneServer(server_address, session=user + ":" + password)
+    cloud_session = CloudSession(server_address, user, password)
 
     create_mach = True
     if create_mach:
-        song_vm_id, score_vm_id, postgres_song_vm_id, base_all_in_one_vm_id = create_machines(one, base_user, base_pass,
+        song_vm_id, score_vm_id, postgres_song_vm_id, base_all_in_one_vm_id = create_machines(cloud_session, base_user, base_pass,
                                                                                               public_ip_login_node,
                                                                                               public_network,
                                                                                               private_network,
@@ -454,15 +355,9 @@ def main(server_address, user, password, reset_base_image=False):
     #deploy_song(one, public_ip_login_node, song_vm_id, postgres_song_vm_id)
     #base_all_in_one_vm_id = 1723
     #base_all_in_one_vm_id = 1734
-    deploy_full_test_stack(one, public_ip_login_node, base_all_in_one_vm_id, tmp_private_key, base_user)
-
-    # wait_until_vm_running(one, base_master_vm_id)
-    # print(result)
-
+    deploy_full_test_stack(cloud_session, public_ip_login_node, base_all_in_one_vm_id, tmp_private_key, base_user)
 
 if __name__ == "__main__":
     username = environ["SL_USER"]
     password = environ["SL_PASS"]
-    print(username)
-    print(password)
-    main("http://slcloud1.bsc.es:2633/RPC2", "ramela", "ramela")
+    main("http://slcloud1.bsc.es:2633/RPC2", username, password)

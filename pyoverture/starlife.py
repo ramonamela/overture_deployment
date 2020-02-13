@@ -1,6 +1,8 @@
 import base64
 import ipaddress
 from enum import Enum
+import sys
+import pyone
 
 
 class VirtualImages(Enum):
@@ -18,6 +20,15 @@ class Description(Enum):
     amount_of_nodes = 48
     cpus_per_node = 40
 
+class CloudSession():
+    def __init__(self, ip, user, password):
+        self.one = pyone.OneServer(ip, session=user + ":" + password)
+        self.user = user
+        self.password = password
+
+class VirtualMachine():
+    def __init__(self, vm_id):
+        self.id = vm_id
 
 class NIC():
     def __init__(self, one, network, network_ip=None, network_owner="oneadmin"):
@@ -48,11 +59,11 @@ class NIC():
 class Template():
     def __init__(self, one, template_name, virtual_image, username, password, cpu, memory, cluster,
                  disk_size=None, hostname=None, ip_forward=None, automount_nfs=None, ssh_public_key=None,
-                 additional_users=[], gateway_interface=None, automatic_update=False, graphics=False, nics=[]):
-        ## The cpus fit into a single node
+                 additional_users=(), gateway_interface=None, automatic_update=False, graphics=False, nics=()):
+        # The cpus fit into a single node
         assert (cpu < cluster.cpus_per_node.value)
 
-        ## Memory has a correct value
+        # Memory has a correct value
         if memory is None:
             memory = cluster.mb_per_core.value * cpu
         else:
@@ -74,6 +85,19 @@ class Template():
                                automount_nfs=automount_nfs, ssh_public_key=ssh_public_key,
                                additional_users=additional_users,
                                gateway_interface=gateway_interface, automatic_update=automatic_update)
+
+    def allocate_template(self, overwrite=False):
+        vm_template = self.one.templatepool.info(-1, -1, -1).VMTEMPLATE
+        ## Check if a template already exists with this name
+        for elem in vm_template:
+            if elem.get_NAME() == self.template_name:
+                if overwrite:
+                    print("Erasing existant template with name \"%s\"" % (self.template_name), file=sys.stderr)
+                    self.one.template.delete(elem.get_ID())
+                else:
+                    raise Exception("A template with name \"%s\" already exists" % (self.template_name))
+
+        return self.one.template.allocate(self.get_full_template())
 
     def get_machine_description(self):
         ## Build the base open nebula template
