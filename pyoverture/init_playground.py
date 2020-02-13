@@ -15,6 +15,7 @@ from pyoverture.starlifetemplate import NIC
 from pyoverture.starlifetemplate import Template
 from pyoverture.starlifetemplate import VirtualImages
 from pyoverture.starlifetemplate import Description
+from os import environ
 
 def create_template(one, template_name, username, password, virtual_image=VirtualImages.UBUNTU1804KVM, cpu=2,
                     memory=None, cluster=Description, overwrite=False, nics=[], hostname=None, ip_forward=None,
@@ -405,7 +406,7 @@ def deploy_full_test_stack(one, public_ip_login_node, base_all_in_one_vm_id, loc
     conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
                       forward_agent=True)
 
-    print("Download song, install docker and install dependencies")
+    print("Download song and install docker and all dependencies")
     out, err = run_command_ssh_gateway(conn, username, private_ip, first_deploy_script)
     print(out)
     print(err)
@@ -440,8 +441,9 @@ def main(server_address, user, password, reset_base_image=False):
                                                                                               private_network,
                                                                                               tmp_public_key,
                                                                                               tmp_private_key,
-                                                                                              remote_private_key, nfs_ip,
-                                                                                              nfs_dest, nfs_origin)
+                                                                                              remote_private_key,
+                                                                                              nfs_ip, nfs_dest,
+                                                                                              nfs_origin)
     else:
         base_all_in_one_vm_id = 1758
 
@@ -459,4 +461,8 @@ def main(server_address, user, password, reset_base_image=False):
 
 
 if __name__ == "__main__":
+    username = environ["SL_USER"]
+    password = environ["SL_PASS"]
+    print(username)
+    print(password)
     main("http://slcloud1.bsc.es:2633/RPC2", "ramela", "ramela")
