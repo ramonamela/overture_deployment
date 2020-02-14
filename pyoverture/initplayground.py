@@ -14,10 +14,13 @@ from pyoverture.starlife import CloudSession
 from pyoverture.utils import generate_rsa_keys
 from pyoverture.utils import run_command_ssh_gateway
 from pyoverture.utils import mount_nfs
+from pyoverture.utils import install_nfs_dependencies
+from pyoverture.utils import apt_get_update
+
 from os import environ
 
 def create_template(cloud_session, template_name, username, password, virtual_image=VirtualImages.UBUNTU1804KVM, cpu=2,
-                    memory=None, cluster=Description, overwrite=False, nics=[], hostname=None, ip_forward=None,
+                    memory=None, cluster=Description, overwrite=False, nics=(), hostname=None, ip_forward=None,
                     automount_nfs=None, gateway_interface=None, graphics=False, ssh_public_key=None, disk_size=None):
     if not isinstance(virtual_image, VirtualImages):
         raise Exception("Unknown base image")
@@ -28,9 +31,9 @@ def create_template(cloud_session, template_name, username, password, virtual_im
                                gateway_interface=gateway_interface, automatic_update=False, graphics=graphics,
                                nics=nics)
 
-    ret = current_template.allocate_template(overwrite=overwrite)
-    print("Created template with id %s" % ret, file=sys.stderr)
-    return ret
+    current_template.allocate_template(overwrite=overwrite)
+    print("Created template with id %s" % current_template.get_id(), file=sys.stderr)
+    return current_template
 
 
 def wait_until_vm_running(one, vm_id, public_ip=None, private_key=None, user=None):
@@ -45,7 +48,7 @@ def wait_until_vm_running(one, vm_id, public_ip=None, private_key=None, user=Non
 
     print("Waiting until vm with id %d and name %s has ssh reachable"
           % (vm_id, one.vmpool.info(-1, vm_id, vm_id, -1).VM[0].NAME), end="")
-    if not public_ip is None:
+    if public_ip is not None:
         keep_trying = True
         connection_args = {}
         if not private_key is None:
@@ -86,6 +89,7 @@ def get_private_ip(one, instance_id):
 
 
 def instantiate_vm(one, base_template_id, base_instance_name, reset_base_image=False):
+    base_template_id = base_template_id.get_id()
     reset_base_image = True
     try:
         new_vm_id = one.template.instantiate(base_template_id, base_instance_name)
@@ -114,48 +118,14 @@ def instantiate_vm(one, base_template_id, base_instance_name, reset_base_image=F
                             else:
                                 print(
                                     "The supplied IP is already in use by a running VM named %s. Set reset base image to "
-                                    "True if you want to try to erase it and try again." % (base_instance_name))
+                                    "True if you want to try to erase it and try again." % base_instance_name)
                                 return None
             print(
                 "The supplied IP is already in use by a running VM named %s. Since this is not the same name supplied,"
                 "it cannot be assumed that it is the same machine. If you want to erase it, erase it by hand."
-                % (base_instance_name))
+                % base_instance_name)
         else:
-            raise (e)
-
-def apt_get_update(public_ip_login_node, private_ip_node, local_private, username="user"):
-
-    print("Waiting until the machine is reachable by ssh and running secure apt get update", end="")
-
-    conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
-                       forward_agent=True)
-
-    command_to_run = "pid=$(ps -elfa | grep apt | grep lock_is_held | grep -v grep | " \
-                     "awk \\'{ print $4 }\\' | xargs -i echo {});while [[ ! -z \"${pid}\" && -e /proc/${pid} ]]; " \
-                     "do sleep 0.1; done;sudo apt-get update;"
-
-    run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
-    conn.close()
-
-def install_nfs_dependencies(public_ip_login_node, private_ip_node, local_private, username="user"):
-    print("Waiting until nfs dependencies are installed", end="")
-
-    conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
-                       forward_agent=True)
-
-    command_to_run = "sudo apt-get -y --no-install-recommends install nfs-common autofs"
-    run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
-    conn.close()
-
-def install_postgres_dependencies(public_ip_login_node, private_ip_node, local_private, username="user"):
-    print("Waiting until the dependencies are installed", end="")
-
-    conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
-                       forward_agent=True)
-
-    command_to_run = "sudo apt-get -y --no-install-recommends install nfs-common autofs"
-    run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
-    conn.close()
+            raise e
 
 def create_machines(one, base_user, base_pass, public_ip_login_node, public_network, private_network,
                     tmp_public_key, tmp_private_key, remote_private_key, nfs_ip, nfs_dest, nfs_origin):
@@ -166,8 +136,7 @@ def create_machines(one, base_user, base_pass, public_ip_login_node, public_netw
     #  In case this must change, add an other value in the class VirtualImages
 
     ## First of all, we need to create a temporal ssh key to perform the connections to the base image
-    one = one.one
-    create_master = False
+    create_master = True
 
     if create_master:
         public_key_object = generate_rsa_keys(tmp_public_key, tmp_private_key)
@@ -191,7 +160,7 @@ def create_machines(one, base_user, base_pass, public_ip_login_node, public_netw
                                            graphics=True, gateway_interface=0,
                                            ssh_public_key=public_key_object, disk_size=16384)
                                             #automount_nfs=(nfs_ip, nfs_origin, nfs_dest),
-
+    one = one.one
     if create_master:
         base_master_vm_id = instantiate_vm(one, base_template_master, "overture_base_vm_master", reset_base_image=True)
 
@@ -210,7 +179,8 @@ def create_machines(one, base_user, base_pass, public_ip_login_node, public_netw
 
     try:
         base_song_vm_id = instantiate_vm(one, base_template_slaves, "overture_base_vm_song", reset_base_image=True)
-        wait_until_vm_running(one, base_song_vm_id)
+        wait_until_vm_running(one, base_song_vm_id, public_ip=public_ip_login_node, private_key=tmp_private_key,
+                              user="user")
         private_ip = get_private_ip(one, base_song_vm_id)
         apt_get_update(public_ip_login_node, private_ip, tmp_private_key)
         install_nfs_dependencies(public_ip_login_node, private_ip, tmp_private_key)
@@ -223,7 +193,8 @@ def create_machines(one, base_user, base_pass, public_ip_login_node, public_netw
 
     try:
         base_score_vm_id = instantiate_vm(one, base_template_slaves, "overture_base_vm_score", reset_base_image=True)
-        wait_until_vm_running(one, base_score_vm_id)
+        wait_until_vm_running(one, base_score_vm_id, public_ip=public_ip_login_node, private_key=tmp_private_key,
+                              user="user")
         private_ip = get_private_ip(one, base_score_vm_id)
         apt_get_update(public_ip_login_node, private_ip, tmp_private_key)
         install_nfs_dependencies(public_ip_login_node, private_ip, tmp_private_key)
@@ -238,7 +209,8 @@ def create_machines(one, base_user, base_pass, public_ip_login_node, public_netw
     try:
         base_postgres_song_vm_id = instantiate_vm(one, base_template_slaves, "overture_base_vm_postgres_song",
                                                   reset_base_image=True)
-        wait_until_vm_running(one, base_postgres_song_vm_id)
+        wait_until_vm_running(one, base_postgres_song_vm_id, public_ip=public_ip_login_node, private_key=tmp_private_key,
+                              user="user")
         private_ip = get_private_ip(one, base_postgres_song_vm_id)
         apt_get_update(public_ip_login_node, private_ip, tmp_private_key)
         install_nfs_dependencies(public_ip_login_node, private_ip, tmp_private_key)
@@ -253,7 +225,8 @@ def create_machines(one, base_user, base_pass, public_ip_login_node, public_netw
     try:
         base_all_in_one_vm_id = instantiate_vm(one, base_template_slaves, "overture_base_vm_all_in_one",
                                                   reset_base_image=True)
-        wait_until_vm_running(one, base_all_in_one_vm_id)
+        wait_until_vm_running(one, base_all_in_one_vm_id, public_ip=public_ip_login_node, private_key=tmp_private_key,
+                              user="user")
         private_ip = get_private_ip(one, base_all_in_one_vm_id)
         apt_get_update(public_ip_login_node, private_ip, tmp_private_key)
         install_nfs_dependencies(public_ip_login_node, private_ip, tmp_private_key)

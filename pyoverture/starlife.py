@@ -3,15 +3,19 @@ import ipaddress
 from enum import Enum
 import sys
 import pyone
+from time import sleep
+from collections import OrderedDict
+from fabric import Connection
+import paramiko
 
 
 class VirtualImages(Enum):
-    #  Apps -> Look for the desired distribution (in this case, "ubuntu" in the searcher and "Ubuntu Minimal 18.04 - KVM
-    #  -> Click into the cloud icon -> Set up a name, select the local datastore (BSC-EUCC Images) -> Download
-    ## We use the structure to store the image ID in the store
-    #  Image datastore EUCANCan -> 120
-    #  Ubuntu 18.04 - KVM       -> 343
-    ## PAIRS (IMAGE ID, HYPERVISOR)
+    # Apps -> Look for the desired distribution (in this case, "ubuntu" in the searcher and "Ubuntu Minimal 18.04 - KVM
+    # -> Click into the cloud icon -> Set up a name, select the local datastore (BSC-EUCC Images) -> Download
+    # We use the structure to store the image ID in the store
+    # Image datastore EUCANCan -> 120
+    # Ubuntu 18.04 - KVM       -> 343
+    # PAIRS (IMAGE ID, HYPERVISOR)
     UBUNTU1804KVM = (536, "kvm")
 
 
@@ -20,17 +24,153 @@ class Description(Enum):
     amount_of_nodes = 48
     cpus_per_node = 40
 
-class CloudSession():
+
+class CloudSession:
     def __init__(self, ip, user, password):
         self.one = pyone.OneServer(ip, session=user + ":" + password)
         self.user = user
         self.password = password
 
-class VirtualMachine():
-    def __init__(self, vm_id):
-        self.id = vm_id
 
-class NIC():
+class VirtualMachine:
+    def __init__(self, template, instance_name, public_ip, cloud_session = None):
+        self.vm_id = None
+        self.one = None
+        self.cloud_session = cloud_session
+        self.template = template
+        self.instance_name = instance_name
+        self.public_ip = public_ip
+        self.private_ip = None
+        self.private_key = None
+
+    def instantiate(self, cloud_session = None, reset_image=False):
+        if cloud_session is None:
+            if self.cloud_session is None:
+                raise("To instantiate a VM, it is mandatory to fournish a correct cloud session")
+            else:
+                cloud_session = self.cloud_session
+
+        self.cloud_session = cloud_session
+        one = self.cloud_session.one
+        reset_base_image = True
+        try:
+            self.vm_id = one.template.instantiate(self.template.get_id(), self.instance_name)
+            return
+        except Exception as e:
+            if "Cannot get IP/MAC" in e.args[0]:
+                vm_list = one.vmpool.info(-1, -1, -1, -1)
+                for vm in vm_list.VM:
+                    if vm.NAME == self.instance_name:
+                        for nic in vm.TEMPLATE["NIC"]:
+                            if nic["IP"] == "84.88.186.194":
+                                if reset_base_image:
+                                    print(
+                                        "The supplied IP is already in use by a running VM named %s. We will try to "
+                                        "erase it "
+                                        "and try again." % self.instance_name)
+                                    one.vm.action("terminate-hard", vm.get_ID())
+                                    print("Virtual Machine with id %s and name %s still not in state DONE" % (
+                                        vm.get_ID(), vm.NAME), end="")
+                                    while not (one.vm.info(vm.get_ID()).STATE == 6):
+                                        print(".", end="")
+                                        sys.stdout.flush()
+                                        sleep(1)
+                                    print("")
+                                    self.vm_id = one.template.instantiate(self.template.get_id(), self.instance_name)
+                                    return
+                                else:
+                                    print(
+                                        "The supplied IP is already in use by a running VM named %s. Set reset base "
+                                        "image to "
+                                        "True if you want to try to erase it and try again." % self.instance_name)
+                                    self.vm_id = None
+                                    return
+                    else:
+                        for nic in vm.TEMPLATE["NIC"]:
+                            if nic["IP"] == "84.88.186.194":
+                                print(
+                                    "The supplied IP is already in use by a running VM named %s. Since this is not the "
+                                    "same name supplied, it cannot be assumed that it is the same machine. If you want "
+                                    "to erase it, erase it by hand."
+                                    % self.instance_name)
+                                return
+            else:
+                raise e
+
+    def get_private_ip(self):
+        if self.vm_id is None:
+            raise Exception("The virtual machine has not been instantiated successfully")
+        one = self.cloud_session.one
+        vm_list = one.vmpool.info(-1, self.vm_id, self.vm_id, -1)
+        # print(vm_list.VM[0].TEMPLATE["NIC"])
+        nic_list = vm_list.VM[0].TEMPLATE["NIC"]
+        if (isinstance(nic_list, OrderedDict)):
+            if nic_list["IP"].startswith("10."):
+                print("")
+                print("Unique IP returned:", nic_list["IP"])
+                self.private_ip = nic_list["IP"]
+                return
+            self.private_ip = None
+            return
+        for nic in vm_list.VM[0].TEMPLATE["NIC"]:
+            if nic["IP"].startswith("10."):
+                print("")
+                print("Several IP returned:", nic["IP"])
+                self.private_ip = nic["IP"]
+                return
+        self.private_ip = None
+        return
+
+    def set_private_key(self, private_key):
+        self.private_key = private_key
+
+    def wait_until_running(self, private_key=None):
+        if self.cloud_session is None:
+            raise Exception('VM has no session associated. This is almost sure because it has not been'
+                            'successfully instantiated.')
+        if self.vm_id is None:
+            raise Exception('VM has no id associated. This is almost sure because it has not been'
+                            'successfully instantiated.')
+        one = self.cloud_session.one
+        user = self.cloud_session.user
+        vm_id = self.vm_id
+        public_ip = self.public_ip
+        if private_key is None:
+            private_key = self.private_key
+
+        print("Waiting until vm with id %d and name %s is running"
+              % (vm_id, one.vmpool.info(-1, vm_id, vm_id, -1).VM[0].NAME), end="")
+        ## ACTIVE and RUNNING
+        while not (one.vm.info(vm_id).STATE == 3 and one.vm.info(vm_id).LCM_STATE == 3):
+            print(".", end="")
+            sys.stdout.flush()
+            sleep(1)
+        print("")
+
+        print("Waiting until vm with id %d and name %s has ssh reachable"
+              % (vm_id, one.vmpool.info(-1, vm_id, vm_id, -1).VM[0].NAME), end="")
+
+        keep_trying = True
+        connection_args = {}
+        if private_key is not None:
+            connection_args["connect_kwargs"] = {"key_filename": private_key}
+        connection_args["user"] = user
+        curr_conn = Connection(public_ip, **connection_args)
+        while keep_trying:
+            print(".", end="")
+            sys.stdout.flush()
+            try:
+                curr_conn.open()
+                curr_conn.close()
+                keep_trying = False
+            except paramiko.ssh_exception.NoValidConnectionsError as e:
+                if not "Unable to connect to port 22" in str(e):
+                    raise (e)
+            sleep(1)
+        print("")
+
+
+class NIC:
     def __init__(self, one, network, network_ip=None, network_owner="oneadmin"):
         self.one = one
         self.network = network
@@ -44,9 +184,9 @@ class NIC():
     def get_nic_description(self):
         if self.network_ip is not None:
             vm_int_net_templ = '''NIC = [
-    IP = "%s",''' % (self.network_ip)
+    IP = "%s",''' % self.network_ip
         else:
-            ## Internal network
+            # Internal network
             vm_int_net_templ = '''NIC = ['''
         vm_int_net_templ += '''
     NETWORK = "%s",
@@ -56,12 +196,12 @@ class NIC():
         return vm_int_net_templ
 
 
-class Template():
-    def __init__(self, one, template_name, virtual_image, username, password, cpu, memory, cluster,
+class Template:
+    def __init__(self, cloud_session, template_name, virtual_image, username, password, cpu, memory, cluster,
                  disk_size=None, hostname=None, ip_forward=None, automount_nfs=None, ssh_public_key=None,
                  additional_users=(), gateway_interface=None, automatic_update=False, graphics=False, nics=()):
         # The cpus fit into a single node
-        assert (cpu < cluster.cpus_per_node.value)
+        assert cpu < cluster.cpus_per_node.value
 
         # Memory has a correct value
         if memory is None:
@@ -69,10 +209,10 @@ class Template():
         else:
             try:
                 int(memory)
-            except:
-                raise ValueError("The given value %s used for the memory is not correct" % (memory))
+            except Exception:
+                raise ValueError("The given value %s used for the memory is not correct" % memory)
 
-        self.one = one
+        self.cloud_session = cloud_session
         self.template_name = template_name
         self.virtual_image = virtual_image
         self.cpu = cpu
@@ -81,37 +221,39 @@ class Template():
         self.disk_size = disk_size
         self.graphics = graphics
         self.nics = nics
-        self.context = Context(one, username, password, hostname=hostname, ip_forward=ip_forward,
+        self.context = Context(self.one, username, password, hostname=hostname, ip_forward=ip_forward,
                                automount_nfs=automount_nfs, ssh_public_key=ssh_public_key,
                                additional_users=additional_users,
                                gateway_interface=gateway_interface, automatic_update=automatic_update)
+        self.template_id = None
 
     def allocate_template(self, overwrite=False):
-        vm_template = self.one.templatepool.info(-1, -1, -1).VMTEMPLATE
-        ## Check if a template already exists with this name
+        one = self.cloud_session.one
+        vm_template = one.templatepool.info(-1, -1, -1).VMTEMPLATE
+        # Check if a template already exists with this name
         for elem in vm_template:
             if elem.get_NAME() == self.template_name:
                 if overwrite:
-                    print("Erasing existant template with name \"%s\"" % (self.template_name), file=sys.stderr)
-                    self.one.template.delete(elem.get_ID())
+                    print("Erasing existant template with name \"%s\"" % self.template_name, file=sys.stderr)
+                    one.template.delete(elem.get_ID())
                 else:
-                    raise Exception("A template with name \"%s\" already exists" % (self.template_name))
+                    raise Exception("A template with name \"%s\" already exists" % self.template_name)
 
-        return self.one.template.allocate(self.get_full_template())
+        self.template_id = one.template.allocate(self.get_full_template())
 
     def get_machine_description(self):
-        ## Build the base open nebula template
+        # Build the base open nebula template
         vm_templ = '''NAME = "%s"
 DISK=[ IMAGE_ID = %d''' % (self.template_name, self.virtual_image.value[0])
-        if not self.disk_size is None:
+        if self.disk_size is not None:
             vm_templ += ''' ,
-SIZE=%s''' % (self.disk_size)
+SIZE=%s''' % self.disk_size
         vm_templ += ''' ]
 CPU = %d
 MEMORY = %d
 MEMORY_UNIT_COST = "MB"
 ''' % (self.cpu, self.memory)
-        if not self.virtual_image.value[1] is None:
+        if self.virtual_image.value[1] is not None:
             vm_templ += '''HYPERVISOR = "%s"
 ''' % (self.virtual_image.value[1])
         return vm_templ
@@ -128,10 +270,12 @@ MEMORY_UNIT_COST = "MB"
             TYPE = "vnc"]"""
         return template
 
+    def get_id(self):
+        return self.template_id
 
-class Context():
+class Context:
     def __init__(self, one, username, password, hostname=None, ip_forward=None, automount_nfs=None, ssh_public_key=None,
-                 additional_users=[], gateway_interface=None, automatic_update=False):
+                 additional_users=(), gateway_interface=None, automatic_update=False):
         self.one = one
         self.username = username
         self.password = password
@@ -143,20 +287,22 @@ class Context():
         self.gateway_interface = gateway_interface
         self.automatic_update = automatic_update
 
-    def _generate_ip_forward(self, public_interface, private_interface):
-        return "sysctl net.ipv4.ip_forward=1; iptables -A FORWARD -i " + private_interface + " -j ACCEPT; iptables -t " \
-                                                                                             "" \
-                                                                                             "nat -o " + \
+    @staticmethod
+    def _generate_ip_forward(public_interface, private_interface):
+        return "sysctl net.ipv4.ip_forward=1; iptables -A FORWARD -i " + private_interface + " -j ACCEPT; iptables -t" \
+                                                                                             " nat -o " + \
                public_interface + " -A POSTROUTING -j MASQUERADE;"
 
-    def _generate_automount_nfs(self, nfs_ip, nfs_origin, nfs_mount_point):
+    @staticmethod
+    def _generate_automount_nfs(nfs_ip, nfs_origin, nfs_mount_point):
         ipaddress.ip_address(nfs_ip)
         return "mkdir -p /etc/auto.master.d;echo \"/-\t/etc/auto.direct\" > /etc/auto.master.d/direct.autofs;echo \"" \
                + \
                nfs_mount_point + "\t-rw,noatime,rsize=1048576,wsize=1048576,nolock,intr,tcp,actimeo=1800\t" + nfs_ip + \
                ":" + nfs_origin + "\" > /etc/auto.direct; /etc/init.d/autofs restart;"
 
-    def _generate_disable_automatic_update(self):
+    @staticmethod
+    def _generate_disable_automatic_update():
         return "sed -i 's/APT::Periodic::Update-Package-Lists \"1\";/APT::Periodic::Update-Package-Lists \"0\";/g' " \
                "/etc/apt/apt.conf.d/20auto-upgrades;" \
                "sed -i 's/APT::Periodic::Unattended-Upgrade \"1\";/APT::Periodic::Unattended-Upgrade \"0\";/g' " \
@@ -170,26 +316,25 @@ class Context():
     PASSWORD = "%s",
     SET_HOSTNAME = "%s",
     NETWORK = "YES",""" % (self.username, self.password, self.hostname)
-        if not self.gateway_interface is None:
+        if self.gateway_interface is not None:
             context_templ += """
-    GATEWAY_IFACE = "ETH%d",""" % (self.gateway_interface)
-        if not self.ssh_public_key is None:
+    GATEWAY_IFACE = "ETH%d",""" % self.gateway_interface
+        if self.ssh_public_key is not None:
             context_templ += """
     SSH_PUBLIC_KEY = "%s",
-""" % (self.ssh_public_key)
+""" % self.ssh_public_key
 
         command_to_execute = ""
-        if not self.ip_forward is None:
+        if self.ip_forward is not None:
             public, private = self.ip_forward
-            command_to_execute += self._generate_ip_forward(public, private)
-        if not self.automount_nfs is None:
+            command_to_execute += Context._generate_ip_forward(public, private)
+        if self.automount_nfs is not None:
             nfs_ip, nfs_origin, nfs_mount_point = self.automount_nfs
-            command_to_execute += self._generate_automount_nfs(nfs_ip, nfs_origin, nfs_mount_point)
+            command_to_execute += Context._generate_automount_nfs(nfs_ip, nfs_origin, nfs_mount_point)
         if not self.automatic_update:
-            command_to_execute += self._generate_disable_automatic_update()
+            command_to_execute += Context._generate_disable_automatic_update()
         if not (command_to_execute == ""):
             context_templ += """    START_SCRIPT_BASE64 = "%s"
-""" % (base64.b64encode(command_to_execute.encode("utf-8")).decode("utf-8"))
-            context_templ
+""" % base64.b64encode(command_to_execute.encode("utf-8")).decode("utf-8")
         context_templ = context_templ[:-1] + "]"
         return context_templ
