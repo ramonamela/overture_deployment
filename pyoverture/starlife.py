@@ -33,26 +33,27 @@ class CloudSession:
 
 
 class VirtualMachine:
-    def __init__(self, template, instance_name, public_ip, cloud_session = None):
+    def __init__(self, template, instance_name, public_ip=None, cloud_session=None, base_user=None):
         self.vm_id = None
         self.one = None
         self.cloud_session = cloud_session
         self.template = template
         self.instance_name = instance_name
         self.public_ip = public_ip
+        self.base_user = base_user
         self.private_ip = None
         self.private_key = None
 
-    def instantiate(self, cloud_session = None, reset_image=False):
+    def instantiate(self, cloud_session=None, reset_image=False):
         if cloud_session is None:
             if self.cloud_session is None:
-                raise("To instantiate a VM, it is mandatory to fournish a correct cloud session")
+                raise Exception("To instantiate a VM, it is mandatory to fournish a correct cloud session")
             else:
                 cloud_session = self.cloud_session
 
         self.cloud_session = cloud_session
         one = self.cloud_session.one
-        reset_base_image = True
+        reset_base_image = reset_image
         try:
             self.vm_id = one.template.instantiate(self.template.get_id(), self.instance_name)
             return
@@ -81,58 +82,116 @@ class VirtualMachine:
                                 else:
                                     print(
                                         "The supplied IP is already in use by a running VM named %s. Set reset base "
-                                        "image to "
-                                        "True if you want to try to erase it and try again." % self.instance_name)
+                                        "image to True if you want to try to erase it and try again. Otherwise, the "
+                                        "program will keep going with the machine in the state as it is currently "
+                                        "assuming that everything is well configured."
+                                        % self.instance_name)
                                     self.vm_id = None
                                     return
                     else:
-                        for nic in vm.TEMPLATE["NIC"]:
-                            if nic["IP"] == "84.88.186.194":
+                        if isinstance(vm.TEMPLATE["NIC"], OrderedDict):
+                            if vm.TEMPLATE["NIC"]["IP"] == "84.88.186.194":
                                 print(
                                     "The supplied IP is already in use by a running VM named %s. Since this is not the "
                                     "same name supplied, it cannot be assumed that it is the same machine. If you want "
                                     "to erase it, erase it by hand."
                                     % self.instance_name)
-                                return
+                                raise e
+                        else:
+                            for nic in vm.TEMPLATE["NIC"]:
+                                print(nic)
+                                if nic["IP"] == "84.88.186.194":
+                                    print(
+                                        "The supplied IP is already in use by a running VM named %s. Since this is not "
+                                        "the same name supplied, it cannot be assumed that it is the same machine. If "
+                                        "you want to erase it, erase it by hand."
+                                        % self.instance_name)
+                                    raise e
             else:
                 raise e
 
-    def get_private_ip(self):
+    def get_ip_list(self):
         if self.vm_id is None:
             raise Exception("The virtual machine has not been instantiated successfully")
         one = self.cloud_session.one
         vm_list = one.vmpool.info(-1, self.vm_id, self.vm_id, -1)
         # print(vm_list.VM[0].TEMPLATE["NIC"])
         nic_list = vm_list.VM[0].TEMPLATE["NIC"]
-        if (isinstance(nic_list, OrderedDict)):
-            if nic_list["IP"].startswith("10."):
-                print("")
-                print("Unique IP returned:", nic_list["IP"])
-                self.private_ip = nic_list["IP"]
-                return
-            self.private_ip = None
-            return
+        ip_list = []
+        if isinstance(nic_list, OrderedDict):
+            ip_list.append(nic_list["IP"])
+            return ip_list
         for nic in vm_list.VM[0].TEMPLATE["NIC"]:
-            if nic["IP"].startswith("10."):
-                print("")
-                print("Several IP returned:", nic["IP"])
-                self.private_ip = nic["IP"]
-                return
-        self.private_ip = None
-        return
+            ip_list.append(nic["IP"])
+        return ip_list
 
-    def set_private_key(self, private_key):
+    def get_private_ip(self):
+        if self.vm_id is None:
+            raise Exception("The virtual machine has not been instantiated successfully")
+        ip_list = self.get_ip_list()
+        self.private_ip = None
+        for ip in ip_list:
+            if ip.startswith("10."):
+                self.private_ip = ip
+                return ip
+        raise Exception("There is not a valid private IP assigned")
+
+    def set_vm_conn_private_key(self, private_key):
         self.private_key = private_key
 
-    def wait_until_running(self, private_key=None):
+    def power_off(self):
+        if self.vm_id is None:
+            raise Exception('VM has no session associated. This is almost sure because it has not been'
+                            'successfully instantiated.')
+        if self.cloud_session is None:
+            raise Exception('VM has no id associated. This is almost sure because it has not been'
+                            'successfully instantiated.')
+        self.vm_id = self.cloud_session.one.vm.action("poweroff", self.cloud_session.one.vmpool.info(-1, self.vm_id,
+                                                                                                     self.vm_id,
+                                                                                                     -1).VM[0].ID)
+
+    def terminate(self):
+        if self.vm_id is None:
+            raise Exception('VM has no session associated. This is almost sure because it has not been'
+                            'successfully instantiated.')
+        if self.cloud_session is None:
+            raise Exception('VM has no id associated. This is almost sure because it has not been'
+                            'successfully instantiated.')
+        self.cloud_session.one.vm.action("terminate", self.cloud_session.one.vmpool.info(-1, self.vm_id, self.vm_id,
+                                                                                         -1).VM[0].ID)
+        self.vm_id = None
+
+    def set_vm_private_key(self, local_private_key, remote_private_key, public_ip=None):
+        if public_ip is None:
+            public_ip = self.public_ip
+        if self.cloud_session is None:
+            raise Exception('VM has no session associated. This is almost sure because it has not been'
+                            'successfully instantiated.')
+        if public_ip is None:
+            raise Exception("VM has no public IP associated. A valid gateway to access to the machine has not been "
+                            "supplied")
+        if self.base_user is None:
+            conn_to_login = Connection(host=public_ip,
+                                       connect_kwargs={"key_filename": local_private_key})
+        else:
+            conn_to_login = Connection(host=public_ip, user=self.base_user,
+                                       connect_kwargs={"key_filename": local_private_key})
+        conn_to_login.put(local_private_key, remote_private_key)
+
+    def wait_until_running(self, public_ip=None, private_key=None):
+        if public_ip is None:
+            public_ip = self.public_ip
         if self.cloud_session is None:
             raise Exception('VM has no session associated. This is almost sure because it has not been'
                             'successfully instantiated.')
         if self.vm_id is None:
             raise Exception('VM has no id associated. This is almost sure because it has not been'
                             'successfully instantiated.')
+        if public_ip is None:
+            raise Exception("VM has no public IP associated. A valid gateway to access to the machine has not been "
+                            "supplied")
         one = self.cloud_session.one
-        user = self.cloud_session.user
+        user = self.base_user
         vm_id = self.vm_id
         public_ip = self.public_ip
         if private_key is None:
@@ -140,7 +199,7 @@ class VirtualMachine:
 
         print("Waiting until vm with id %d and name %s is running"
               % (vm_id, one.vmpool.info(-1, vm_id, vm_id, -1).VM[0].NAME), end="")
-        ## ACTIVE and RUNNING
+        # ACTIVE and RUNNING
         while not (one.vm.info(vm_id).STATE == 3 and one.vm.info(vm_id).LCM_STATE == 3):
             print(".", end="")
             sys.stdout.flush()
@@ -154,7 +213,8 @@ class VirtualMachine:
         connection_args = {}
         if private_key is not None:
             connection_args["connect_kwargs"] = {"key_filename": private_key}
-        connection_args["user"] = user
+        if user is not None:
+            connection_args["user"] = user
         curr_conn = Connection(public_ip, **connection_args)
         while keep_trying:
             print(".", end="")
@@ -164,15 +224,15 @@ class VirtualMachine:
                 curr_conn.close()
                 keep_trying = False
             except paramiko.ssh_exception.NoValidConnectionsError as e:
-                if not "Unable to connect to port 22" in str(e):
-                    raise (e)
+                if "Unable to connect to port 22" not in str(e):
+                    raise e
             sleep(1)
         print("")
 
 
 class NIC:
-    def __init__(self, one, network, network_ip=None, network_owner="oneadmin"):
-        self.one = one
+    def __init__(self, cloud_session, network, network_ip=None, network_owner="oneadmin"):
+        self.cloud_session = cloud_session
         self.network = network
         if network_ip is None:
             self.network_ip = network_ip
@@ -221,7 +281,7 @@ class Template:
         self.disk_size = disk_size
         self.graphics = graphics
         self.nics = nics
-        self.context = Context(self.one, username, password, hostname=hostname, ip_forward=ip_forward,
+        self.context = Context(username, password, hostname=hostname, ip_forward=ip_forward,
                                automount_nfs=automount_nfs, ssh_public_key=ssh_public_key,
                                additional_users=additional_users,
                                gateway_interface=gateway_interface, automatic_update=automatic_update)
@@ -273,10 +333,10 @@ MEMORY_UNIT_COST = "MB"
     def get_id(self):
         return self.template_id
 
+
 class Context:
-    def __init__(self, one, username, password, hostname=None, ip_forward=None, automount_nfs=None, ssh_public_key=None,
+    def __init__(self, username, password, hostname=None, ip_forward=None, automount_nfs=None, ssh_public_key=None,
                  additional_users=(), gateway_interface=None, automatic_update=False):
-        self.one = one
         self.username = username
         self.password = password
         self.hostname = hostname
