@@ -86,7 +86,7 @@ class VirtualMachine:
                                         "program will keep going with the machine in the state as it is currently "
                                         "assuming that everything is well configured."
                                         % self.instance_name)
-                                    self.vm_id = None
+                                    self.vm_id = vm.ID
                                     return
                     else:
                         if isinstance(vm.TEMPLATE["NIC"], OrderedDict):
@@ -141,10 +141,10 @@ class VirtualMachine:
 
     def power_off(self):
         if self.vm_id is None:
-            raise Exception('VM has no session associated. This is almost sure because it has not been'
+            raise Exception('VM has no session associated. This is almost sure because it has not been '
                             'successfully instantiated.')
         if self.cloud_session is None:
-            raise Exception('VM has no id associated. This is almost sure because it has not been'
+            raise Exception('VM has no id associated. This is almost sure because it has not been '
                             'successfully instantiated.')
         self.vm_id = self.cloud_session.one.vm.action("poweroff", self.cloud_session.one.vmpool.info(-1, self.vm_id,
                                                                                                      self.vm_id,
@@ -152,10 +152,10 @@ class VirtualMachine:
 
     def terminate(self):
         if self.vm_id is None:
-            raise Exception('VM has no session associated. This is almost sure because it has not been'
+            raise Exception('VM has no session associated. This is almost sure because it has not been '
                             'successfully instantiated.')
         if self.cloud_session is None:
-            raise Exception('VM has no id associated. This is almost sure because it has not been'
+            raise Exception('VM has no id associated. This is almost sure because it has not been '
                             'successfully instantiated.')
         self.cloud_session.one.vm.action("terminate", self.cloud_session.one.vmpool.info(-1, self.vm_id, self.vm_id,
                                                                                          -1).VM[0].ID)
@@ -182,10 +182,10 @@ class VirtualMachine:
         if public_ip is None:
             public_ip = self.public_ip
         if self.cloud_session is None:
-            raise Exception('VM has no session associated. This is almost sure because it has not been'
+            raise Exception('VM has no session associated. This is almost sure because it has not been '
                             'successfully instantiated.')
         if self.vm_id is None:
-            raise Exception('VM has no id associated. This is almost sure because it has not been'
+            raise Exception('VM has no id associated. This is almost sure because it has not been '
                             'successfully instantiated.')
         if public_ip is None:
             raise Exception("VM has no public IP associated. A valid gateway to access to the machine has not been "
