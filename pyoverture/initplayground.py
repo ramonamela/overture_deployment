@@ -3,6 +3,7 @@
 # from libcloud.compute.providers import get_driver
 import sys
 from os import environ
+from pathlib import Path
 # from time import sleep
 # from fabric import Connection
 # import paramiko
@@ -17,7 +18,13 @@ from pyoverture.utils import generate_rsa_keys
 from pyoverture.utils import mount_nfs
 from pyoverture.utils import install_nfs_dependencies
 from pyoverture.utils import apt_get_update
-from pyoverture.deployutils import deploy_full_test_stack
+from pyoverture.utils import install_docker_dependencies
+# from pyoverture.deployutils import deploy_full_test_stack
+from pyoverture.deployutils import deploy_postgres
+from pyoverture.deployutils import deploy_ego
+from pyoverture.deployutils import deploy_minio
+from pyoverture.deployutils import deploy_score_server
+from pyoverture.deployutils import initialize_s3_bucket_minio
 
 
 def create_template(cloud_session, template_name, template_username, template_password,
@@ -78,23 +85,99 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
     base_master_vm.set_vm_conn_private_key(tmp_private_key)
     base_master_vm.wait_until_running()
     base_master_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-    private_ip = base_master_vm.get_private_ip()
-    apt_get_update(public_ip_login_node, private_ip, tmp_private_key)
-    # NFS dependencies are not needed in the master since it should have not have the node mounted
-    # install_nfs_dependencies(public_ip_login_node, private_ip, tmp_private_key)
+    master_private_ip = base_master_vm.get_private_ip()
+    apt_get_update(public_ip_login_node, master_private_ip, tmp_private_key)
+    install_docker_dependencies(public_ip_login_node, master_private_ip, tmp_private_key)
+
+    install_nfs_dependencies(public_ip_login_node, master_private_ip, tmp_private_key)
+    mount_nfs(public_ip_login_node, master_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
+              username="user")
     # If we shutdown the master node, the public IP stop being available
     # base_master_vm_id = one.vm.action("poweroff", one.vmpool.info(-1, base_master_vm_id,
     # base_master_vm_id, -1).VM[0].ID)
-    """
+
+    base_postgres_song_vm = VirtualMachine(base_template_slaves, "overture_base_vm_postgres_song",
+                                           public_ip=public_ip_login_node, base_user=base_user)
+    try:
+        base_postgres_song_vm.instantiate(cloud_session=cloud_session, check_name=True)
+        base_postgres_song_vm.set_vm_conn_private_key(tmp_private_key)
+        base_postgres_song_vm.wait_until_running()
+        base_postgres_song_vm.set_vm_private_key(tmp_private_key, remote_private_key)
+        base_postgres_song_private_ip = base_postgres_song_vm.get_private_ip()
+        apt_get_update(public_ip_login_node, base_postgres_song_private_ip, tmp_private_key)
+        install_docker_dependencies(public_ip_login_node, base_postgres_song_private_ip, tmp_private_key)
+        install_nfs_dependencies(public_ip_login_node, base_postgres_song_private_ip, tmp_private_key)
+        mount_nfs(public_ip_login_node, base_postgres_song_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
+                  username="user")
+    except Exception as e:
+        print(e)
+        base_postgres_song_vm.terminate()
+        raise e
+
+    base_postgres_ego_vm = VirtualMachine(base_template_slaves, "overture_base_vm_postgres_ego",
+                                          public_ip=public_ip_login_node, base_user=base_user)
+    try:
+        base_postgres_ego_vm.instantiate(cloud_session=cloud_session, check_name=True)
+        base_postgres_ego_vm.set_vm_conn_private_key(tmp_private_key)
+        base_postgres_ego_vm.wait_until_running()
+        base_postgres_ego_vm.set_vm_private_key(tmp_private_key, remote_private_key)
+        base_postgres_ego_private_ip = base_postgres_ego_vm.get_private_ip()
+        apt_get_update(public_ip_login_node, base_postgres_ego_private_ip, tmp_private_key)
+        install_docker_dependencies(public_ip_login_node, base_postgres_ego_private_ip, tmp_private_key)
+        install_nfs_dependencies(public_ip_login_node, base_postgres_ego_private_ip, tmp_private_key)
+        mount_nfs(public_ip_login_node, base_postgres_ego_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
+                  username="user")
+    except Exception as e:
+        print(e)
+        base_postgres_ego_vm.terminate()
+        raise e
+
+    base_minio_score_vm = VirtualMachine(base_template_slaves, "overture_base_vm_minio_score",
+                                         public_ip=public_ip_login_node, base_user=base_user)
+    try:
+        base_minio_score_vm.instantiate(cloud_session=cloud_session, check_name=True)
+        base_minio_score_vm.set_vm_conn_private_key(tmp_private_key)
+        base_minio_score_vm.wait_until_running()
+        base_minio_score_vm.set_vm_private_key(tmp_private_key, remote_private_key)
+        base_minio_score_private_ip = base_minio_score_vm.get_private_ip()
+        apt_get_update(public_ip_login_node, base_minio_score_private_ip, tmp_private_key)
+        install_docker_dependencies(public_ip_login_node, base_minio_score_private_ip, tmp_private_key)
+        install_nfs_dependencies(public_ip_login_node, base_minio_score_private_ip, tmp_private_key)
+        mount_nfs(public_ip_login_node, base_minio_score_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
+                  username="user")
+    except Exception as e:
+        print(e)
+        base_minio_score_vm.terminate()
+        raise e
+
+    base_ego_vm = VirtualMachine(base_template_slaves, "overture_base_vm_ego", public_ip=public_ip_login_node,
+                                 base_user=base_user)
+    try:
+        base_ego_vm.instantiate(cloud_session=cloud_session, check_name=True)
+        base_ego_vm.set_vm_conn_private_key(tmp_private_key)
+        base_ego_vm.wait_until_running()
+        base_ego_vm.set_vm_private_key(tmp_private_key, remote_private_key)
+        base_ego_private_ip = base_ego_vm.get_private_ip()
+        apt_get_update(public_ip_login_node, base_ego_private_ip, tmp_private_key)
+        install_docker_dependencies(public_ip_login_node, base_ego_private_ip, tmp_private_key)
+        install_nfs_dependencies(public_ip_login_node, base_ego_private_ip, tmp_private_key)
+        mount_nfs(public_ip_login_node, base_ego_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
+                  username="user")
+    except Exception as e:
+        print(e)
+        base_ego_vm.terminate()
+        raise e
+
     base_song_vm = VirtualMachine(base_template_slaves, "overture_base_vm_song", public_ip=public_ip_login_node,
                                   base_user=base_user)
     try:
-        base_song_vm.instantiate(cloud_session=cloud_session)
+        base_song_vm.instantiate(cloud_session=cloud_session, check_name=True)
         base_song_vm.set_vm_conn_private_key(tmp_private_key)
         base_song_vm.wait_until_running()
         base_song_vm.set_vm_private_key(tmp_private_key, remote_private_key)
         base_song_private_ip = base_song_vm.get_private_ip()
         apt_get_update(public_ip_login_node, base_song_private_ip, tmp_private_key)
+        install_docker_dependencies(public_ip_login_node, base_song_private_ip, tmp_private_key)
         install_nfs_dependencies(public_ip_login_node, base_song_private_ip, tmp_private_key)
         mount_nfs(public_ip_login_node, base_song_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
                   username="user")
@@ -106,12 +189,13 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
     base_score_vm = VirtualMachine(base_template_slaves, "overture_base_vm_score", public_ip=public_ip_login_node,
                                    base_user=base_user)
     try:
-        base_score_vm.instantiate(cloud_session=cloud_session)
+        base_score_vm.instantiate(cloud_session=cloud_session, check_name=True)
         base_score_vm.set_vm_conn_private_key(tmp_private_key)
         base_score_vm.wait_until_running()
         base_score_vm.set_vm_private_key(tmp_private_key, remote_private_key)
         base_score_private_ip = base_score_vm.get_private_ip()
         apt_get_update(public_ip_login_node, base_score_private_ip, tmp_private_key)
+        install_docker_dependencies(public_ip_login_node, base_score_private_ip, tmp_private_key)
         install_nfs_dependencies(public_ip_login_node, base_score_private_ip, tmp_private_key)
         mount_nfs(public_ip_login_node, base_score_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
                   username="user")
@@ -119,33 +203,17 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
         print(e)
         base_score_vm.terminate()
         raise e
-    """
-    base_postgres_song_vm = VirtualMachine(base_template_slaves, "overture_base_vm_postgres_song",
-                                           public_ip=public_ip_login_node, base_user=base_user)
-    try:
-        base_postgres_song_vm.instantiate(cloud_session=cloud_session)
-        base_postgres_song_vm.set_vm_conn_private_key(tmp_private_key)
-        base_postgres_song_vm.wait_until_running()
-        base_postgres_song_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-        base_postgres_private_ip = base_postgres_song_vm.get_private_ip()
-        apt_get_update(public_ip_login_node, base_postgres_private_ip, tmp_private_key)
-        install_nfs_dependencies(public_ip_login_node, base_postgres_private_ip, tmp_private_key)
-        mount_nfs(public_ip_login_node, base_postgres_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
-                  username="user")
-    except Exception as e:
-        print(e)
-        base_postgres_song_vm.terminate()
-        raise e
 
     base_all_in_one_vm = VirtualMachine(base_template_slaves, "overture_base_vm_all_in_one",
                                         public_ip=public_ip_login_node, base_user=base_user)
     try:
-        base_all_in_one_vm.instantiate(cloud_session=cloud_session)
+        base_all_in_one_vm.instantiate(cloud_session=cloud_session, check_name=True)
         base_all_in_one_vm.set_vm_conn_private_key(tmp_private_key)
         base_all_in_one_vm.wait_until_running()
         base_all_in_one_vm.set_vm_private_key(tmp_private_key, remote_private_key)
         base_all_in_one_private_ip = base_all_in_one_vm.get_private_ip()
         apt_get_update(public_ip_login_node, base_all_in_one_private_ip, tmp_private_key)
+        install_docker_dependencies(public_ip_login_node, base_all_in_one_private_ip, tmp_private_key)
         install_nfs_dependencies(public_ip_login_node, base_all_in_one_private_ip, tmp_private_key)
         mount_nfs(public_ip_login_node, base_all_in_one_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
                   username="user")
@@ -155,7 +223,9 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
         raise e
 
     # return base_song_vm, base_score_vm, base_postgres_song_vm, base_all_in_one_vm
-    return base_all_in_one_vm
+    return \
+        base_postgres_song_vm, base_postgres_ego_vm, base_minio_score_vm, base_ego_vm, base_score_vm, base_song_vm, \
+        base_all_in_one_vm
 
 
 def main(server_address, cloud_user, cloud_password, reset_login_vm=False):
@@ -173,24 +243,78 @@ def main(server_address, cloud_user, cloud_password, reset_login_vm=False):
     # https://github.com/fabric/fabric/issues/1492
     # Due to a fabric limitation, we MUST store the private key with this name
     remote_private_key = "/home/" + base_user + "/.ssh/id_rsa"
+    host_working_path = "/mnt/nfs/overture_working_dir/"
 
     cloud_session = CloudSession(server_address, cloud_user, cloud_password)
 
     # song_vm, score_vm, postgres_song_vm, base_all_in_one_vm = create_machines(cloud_session, base_user,
-    base_all_in_one_vm = create_machines(cloud_session, base_user, base_pass, public_ip_login_node, public_network,
-                                         private_network, tmp_public_key, tmp_private_key, remote_private_key,
-                                         nfs_ip, nfs_dest, nfs_origin, reset_login_vm=reset_login_vm,
-                                         create_new_keys=False)
+    (base_postgres_song_vm, base_postgres_ego_vm, base_minio_score_vm, base_ego_vm, base_score_vm, base_song_vm,
+     base_all_in_one_vm
+     ) = create_machines(
+        cloud_session, base_user, base_pass, public_ip_login_node, public_network, private_network, tmp_public_key,
+        tmp_private_key, remote_private_key, nfs_ip, nfs_dest, nfs_origin, reset_login_vm=reset_login_vm,
+        create_new_keys=False)
 
+    song_postgres_name = "song"
+    song_postgres_username = "postgres"
+    song_postgres_password = "password"
+    song_postgres_port = "5432"
+    song_postgres_base_image = "postgres:9.6"
+    song_postgres_init_file = Path("/mnt/nfs/overture_files/song-db/song-init.sql")
+    song_postgres_folder_working_path = host_working_path + "/song_db/"
 
-    # song_vm_id, score_vm_id, postgres_song_vm_id = 1711, 1712
+    deploy_postgres(base_postgres_song_vm, song_postgres_username, song_postgres_password, song_postgres_name,
+                    song_postgres_port, song_postgres_folder_working_path, song_postgres_init_file,
+                    song_postgres_base_image, container_name="song_postgres", verbose=True)
 
-    # deploy_score(one, public_ip_login_node, score_vm_id)
+    ego_postgres_name = "ego"
+    ego_postgres_username = "postgres"
+    ego_postgres_password = "password"
+    ego_postgres_port = "5432"
+    ego_postgres_base_image = "postgres:9.5"
+    ego_postgres_init_file = Path("/mnt/nfs/overture_files/ego-db/init.sql")
+    ego_postgres_folder_working_path = host_working_path + "/ego_db/"
+    ego_postgres_private_ip = base_postgres_ego_vm.get_private_ip()
 
-    # deploy_song(one, public_ip_login_node, song_vm_id, postgres_song_vm_id)
-    # base_all_in_one_vm_id = 1723
-    # base_all_in_one_vm_id = 1734
-    deploy_full_test_stack(public_ip_login_node, base_all_in_one_vm, tmp_private_key, base_user)
+    deploy_postgres(base_postgres_ego_vm, ego_postgres_username, ego_postgres_password, ego_postgres_name,
+                    ego_postgres_port, ego_postgres_folder_working_path, ego_postgres_init_file,
+                    ego_postgres_base_image, container_name="ego_postgres", verbose=True)
+
+    ego_port = "9082"
+    ego_base_image = "overture/ego:2.9.0"
+
+    deploy_ego(base_ego_vm, ego_port, ego_postgres_private_ip, ego_postgres_port, ego_postgres_username,
+               ego_postgres_password, ego_base_image, container_name="ego_service", verbose=True)
+
+    minio_score_port = "8085"
+    minio_score_username = "minio"
+    minio_score_password = "minio123"
+    minio_score_base_image = "minio/minio:RELEASE.2018-05-11T00-29-24Z"
+    minio_score_init_file = Path("/mnt/nfs/overture_files/minio-db/heliograph")
+    minio_score_folder_working_path = host_working_path + "/score_db/"
+    deploy_minio(base_minio_score_vm, minio_score_port, minio_score_username, minio_score_password,
+                 minio_score_base_image, container_name="score_minio")
+
+    aws_cli_base_image = "mesosphere/aws-cli:latest"
+    s3_region = "us-east-1"
+    s3_name = "oicr.icgc.test"
+    minio_private_ip = base_minio_score_vm.get_private_ip()
+    initialize_s3_bucket_minio(base_minio_score_vm, minio_score_username, minio_score_password, minio_private_ip,
+                               minio_score_port, s3_name, s3_region, minio_score_init_file,
+                               minio_score_folder_working_path, aws_cli_base_image)
+
+    score_base_image = "overture/score-server:2.0.1"
+    score_port = "8087"
+    song_port = "8080"
+    song_address = base_song_vm.get_private_ip()
+    ego_private_ip = base_ego_vm.get_private_ip()
+    auth_url = "http://" + ego_private_ip + ":" + minio_score_port + "/o/check_token/"
+    score_username = "score"
+    score_password = "scoresecret"
+    deploy_score_server(base_score_vm, score_username, score_password, score_port, song_address, song_port, s3_name,
+                        minio_private_ip, minio_score_port, minio_score_username, minio_score_password, auth_url,
+                        score_base_image, verbose=True)
+    # deploy_full_test_stack(public_ip_login_node, base_all_in_one_vm, tmp_private_key, base_user, verbose=True)
 
 
 if __name__ == "__main__":

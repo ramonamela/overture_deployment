@@ -1,0 +1,6 @@
+{
+	"song-db": {
+		"port": 5432,
+		"init_sql": "/mnt/nfs/overture_files/song-db/song-init.sql"
+	}
+}

@@ -7,6 +7,7 @@ from time import sleep
 from collections import OrderedDict
 from fabric import Connection
 import paramiko
+from pyoverture.utils import run_command_ssh_gateway
 
 
 class VirtualImages(Enum):
@@ -44,7 +45,7 @@ class VirtualMachine:
         self.private_ip = None
         self.private_key = None
 
-    def instantiate(self, cloud_session=None, reset_image=False):
+    def instantiate(self, cloud_session=None, reset_image=False, check_name=False):
         if cloud_session is None:
             if self.cloud_session is None:
                 raise Exception("To instantiate a VM, it is mandatory to fournish a correct cloud session")
@@ -54,6 +55,15 @@ class VirtualMachine:
         self.cloud_session = cloud_session
         one = self.cloud_session.one
         reset_base_image = reset_image
+
+        if check_name:
+            vm_list = one.vmpool.info(-1, -1, -1, -1)
+            for vm in vm_list.VM:
+                if vm.NAME == self.instance_name:
+                    self.vm_id = vm.ID
+                    print("There is already a virtual machine with the name %s. If you want to ignore it and create a "
+                          "new one, set \"check_name\" to False." % self.instance_name)
+                    return
         try:
             self.vm_id = one.template.instantiate(self.template.get_id(), self.instance_name)
             return
@@ -110,6 +120,20 @@ class VirtualMachine:
             else:
                 raise e
 
+    def run_command(self, command, print_message=None, verbose=False):
+        private_ip = self.get_private_ip()
+        public_ip_login_node = self.get_public_ip()
+        local_private = self.get_local_rsa_private()
+        base_user = self.get_base_user()
+        conn = Connection(host=public_ip_login_node, user=base_user, connect_kwargs={"key_filename": local_private},
+                          forward_agent=True)
+        if print_message is not None:
+            print(print_message, end="")
+        out, err = run_command_ssh_gateway(conn, base_user, private_ip, command)
+        if verbose:
+            print(out, err)
+        return out, err
+
     def get_ip_list(self):
         if self.vm_id is None:
             raise Exception("The virtual machine has not been instantiated successfully")
@@ -136,8 +160,30 @@ class VirtualMachine:
                 return ip
         raise Exception("There is not a valid private IP assigned")
 
+    def get_public_ip(self):
+        if self.public_ip is None:
+            raise(Exception("The virtual machine does not have a public IP associated. This is almost for sure because"
+                            "it has not been correctly instantiated"))
+        return self.public_ip
+
+    def get_local_rsa_private(self):
+        return self.private_key
+
+    def get_base_user(self):
+        return self.base_user
+
     def set_vm_conn_private_key(self, private_key):
         self.private_key = private_key
+
+    def run_ssh_command(self, command):
+        private_ip = self.get_private_ip()
+        public_ip_login_node = self.get_public_ip()
+        local_private = self.get_local_rsa_private()
+        base_user = self.get_base_user()
+        conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
+                          forward_agent=True)
+        out, err = run_command_ssh_gateway(conn, base_user, private_ip, command)
+        return out, err
 
     def power_off(self):
         if self.vm_id is None:
