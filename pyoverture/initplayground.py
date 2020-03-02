@@ -25,6 +25,7 @@ from pyoverture.deployutils import deploy_ego
 from pyoverture.deployutils import deploy_minio
 from pyoverture.deployutils import deploy_score_server
 from pyoverture.deployutils import initialize_s3_bucket_minio
+from pyoverture.deployutils import deploy_song_server
 
 
 def create_template(cloud_session, template_name, template_username, template_password,
@@ -92,6 +93,7 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
     install_nfs_dependencies(public_ip_login_node, master_private_ip, tmp_private_key)
     mount_nfs(public_ip_login_node, master_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
               username="user")
+
     # If we shutdown the master node, the public IP stop being available
     # base_master_vm_id = one.vm.action("poweroff", one.vmpool.info(-1, base_master_vm_id,
     # base_master_vm_id, -1).VM[0].ID)
@@ -300,8 +302,8 @@ def main(server_address, cloud_user, cloud_password, reset_login_vm=False):
     s3_name = "oicr.icgc.test"
     minio_private_ip = base_minio_score_vm.get_private_ip()
     initialize_s3_bucket_minio(base_minio_score_vm, minio_score_username, minio_score_password, minio_private_ip,
-                               minio_score_port, s3_name, s3_region, minio_score_init_file,
-                               minio_score_folder_working_path, aws_cli_base_image)
+                               minio_score_port, s3_name, s3_region, minio_score_folder_working_path,
+                               minio_score_init_file, aws_cli_base_image)
 
     score_base_image = "overture/score-server:2.0.1"
     score_port = "8087"
@@ -313,7 +315,20 @@ def main(server_address, cloud_user, cloud_password, reset_login_vm=False):
     score_password = "scoresecret"
     deploy_score_server(base_score_vm, score_username, score_password, score_port, song_address, song_port, s3_name,
                         minio_private_ip, minio_score_port, minio_score_username, minio_score_password, auth_url,
-                        score_base_image, verbose=True)
+                        score_base_image, container_name="score_service", verbose=True)
+
+    song_base_image = "overture/song-server:3.0.1"
+    song_username = "song"
+    song_password = "songsecret"
+    song_folder_working_path = host_working_path + "/song_logs/"
+    score_private_ip = base_score_vm.get_private_ip()
+    score_url = "http://" + score_private_ip + ":" + score_port
+    score_token = "f69b726d-d40f-4261-b105-1ec7e6bf04d5"
+    postgres_song_url = "jdbc:postgresql://" + base_postgres_song_vm.get_private_ip() + ":" + song_postgres_port \
+                        + "/song?stringtype=unspecified"
+    deploy_song_server(base_song_vm, song_username, song_password, song_port, song_folder_working_path,
+                       song_postgres_username, song_postgres_password, postgres_song_url, score_url, score_token,
+                       auth_url, song_base_image, container_name="song_service", verbose=True)
     # deploy_full_test_stack(public_ip_login_node, base_all_in_one_vm, tmp_private_key, base_user, verbose=True)
 
 
