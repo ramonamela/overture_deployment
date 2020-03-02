@@ -86,13 +86,12 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
     base_master_vm.set_vm_conn_private_key(tmp_private_key)
     base_master_vm.wait_until_running()
     base_master_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-    master_private_ip = base_master_vm.get_private_ip()
-    apt_get_update(public_ip_login_node, master_private_ip, tmp_private_key)
-    install_docker_dependencies(public_ip_login_node, master_private_ip, tmp_private_key)
 
-    install_nfs_dependencies(public_ip_login_node, master_private_ip, tmp_private_key)
-    mount_nfs(public_ip_login_node, master_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
-              username="user")
+    apt_get_update(base_master_vm)
+    install_docker_dependencies(base_master_vm)
+
+    install_nfs_dependencies(base_master_vm)
+    mount_nfs(base_master_vm, nfs_ip, nfs_dest, nfs_origin)
 
     # If we shutdown the master node, the public IP stop being available
     # base_master_vm_id = one.vm.action("poweroff", one.vmpool.info(-1, base_master_vm_id,
@@ -105,12 +104,10 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
         base_postgres_song_vm.set_vm_conn_private_key(tmp_private_key)
         base_postgres_song_vm.wait_until_running()
         base_postgres_song_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-        base_postgres_song_private_ip = base_postgres_song_vm.get_private_ip()
-        apt_get_update(public_ip_login_node, base_postgres_song_private_ip, tmp_private_key)
-        install_docker_dependencies(public_ip_login_node, base_postgres_song_private_ip, tmp_private_key)
-        install_nfs_dependencies(public_ip_login_node, base_postgres_song_private_ip, tmp_private_key)
-        mount_nfs(public_ip_login_node, base_postgres_song_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
-                  username="user")
+        apt_get_update(base_postgres_song_vm)
+        install_docker_dependencies(base_postgres_song_vm)
+        install_nfs_dependencies(base_postgres_song_vm)
+        mount_nfs(base_postgres_song_vm, nfs_ip, nfs_dest, nfs_origin)
     except Exception as e:
         print(e)
         base_postgres_song_vm.terminate()
@@ -123,12 +120,10 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
         base_postgres_ego_vm.set_vm_conn_private_key(tmp_private_key)
         base_postgres_ego_vm.wait_until_running()
         base_postgres_ego_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-        base_postgres_ego_private_ip = base_postgres_ego_vm.get_private_ip()
-        apt_get_update(public_ip_login_node, base_postgres_ego_private_ip, tmp_private_key)
-        install_docker_dependencies(public_ip_login_node, base_postgres_ego_private_ip, tmp_private_key)
-        install_nfs_dependencies(public_ip_login_node, base_postgres_ego_private_ip, tmp_private_key)
-        mount_nfs(public_ip_login_node, base_postgres_ego_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
-                  username="user")
+        apt_get_update(base_postgres_ego_vm)
+        install_docker_dependencies(base_postgres_ego_vm)
+        install_nfs_dependencies(base_postgres_ego_vm)
+        mount_nfs(base_postgres_song_vm, nfs_ip, nfs_dest, nfs_origin)
     except Exception as e:
         print(e)
         base_postgres_ego_vm.terminate()
@@ -141,12 +136,10 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
         base_minio_score_vm.set_vm_conn_private_key(tmp_private_key)
         base_minio_score_vm.wait_until_running()
         base_minio_score_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-        base_minio_score_private_ip = base_minio_score_vm.get_private_ip()
-        apt_get_update(public_ip_login_node, base_minio_score_private_ip, tmp_private_key)
-        install_docker_dependencies(public_ip_login_node, base_minio_score_private_ip, tmp_private_key)
-        install_nfs_dependencies(public_ip_login_node, base_minio_score_private_ip, tmp_private_key)
-        mount_nfs(public_ip_login_node, base_minio_score_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
-                  username="user")
+        apt_get_update(base_minio_score_vm)
+        install_docker_dependencies(base_minio_score_vm)
+        install_nfs_dependencies(base_minio_score_vm)
+        mount_nfs(base_minio_score_vm, nfs_ip, nfs_dest, nfs_origin)
     except Exception as e:
         print(e)
         base_minio_score_vm.terminate()
@@ -159,12 +152,10 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
         base_ego_vm.set_vm_conn_private_key(tmp_private_key)
         base_ego_vm.wait_until_running()
         base_ego_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-        base_ego_private_ip = base_ego_vm.get_private_ip()
-        apt_get_update(public_ip_login_node, base_ego_private_ip, tmp_private_key)
-        install_docker_dependencies(public_ip_login_node, base_ego_private_ip, tmp_private_key)
-        install_nfs_dependencies(public_ip_login_node, base_ego_private_ip, tmp_private_key)
-        mount_nfs(public_ip_login_node, base_ego_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
-                  username="user")
+        apt_get_update(base_ego_vm)
+        install_docker_dependencies(base_ego_vm)
+        install_nfs_dependencies(base_ego_vm)
+        mount_nfs(base_ego_vm, nfs_ip, nfs_dest, nfs_origin)
     except Exception as e:
         print(e)
         base_ego_vm.terminate()
@@ -177,12 +168,10 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
         base_song_vm.set_vm_conn_private_key(tmp_private_key)
         base_song_vm.wait_until_running()
         base_song_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-        base_song_private_ip = base_song_vm.get_private_ip()
-        apt_get_update(public_ip_login_node, base_song_private_ip, tmp_private_key)
-        install_docker_dependencies(public_ip_login_node, base_song_private_ip, tmp_private_key)
-        install_nfs_dependencies(public_ip_login_node, base_song_private_ip, tmp_private_key)
-        mount_nfs(public_ip_login_node, base_song_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
-                  username="user")
+        apt_get_update(base_song_vm)
+        install_docker_dependencies(base_song_vm)
+        install_nfs_dependencies(base_song_vm)
+        mount_nfs(base_song_vm, nfs_ip, nfs_dest, nfs_origin)
     except Exception as e:
         print(e)
         base_song_vm.terminate()
@@ -195,12 +184,10 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
         base_score_vm.set_vm_conn_private_key(tmp_private_key)
         base_score_vm.wait_until_running()
         base_score_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-        base_score_private_ip = base_score_vm.get_private_ip()
-        apt_get_update(public_ip_login_node, base_score_private_ip, tmp_private_key)
-        install_docker_dependencies(public_ip_login_node, base_score_private_ip, tmp_private_key)
-        install_nfs_dependencies(public_ip_login_node, base_score_private_ip, tmp_private_key)
-        mount_nfs(public_ip_login_node, base_score_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
-                  username="user")
+        apt_get_update(base_score_vm)
+        install_docker_dependencies(base_score_vm)
+        install_nfs_dependencies(base_score_vm)
+        mount_nfs(base_score_vm, nfs_ip, nfs_dest, nfs_origin)
     except Exception as e:
         print(e)
         base_score_vm.terminate()
@@ -213,12 +200,10 @@ def create_machines(cloud_session, base_user, base_pass, public_ip_login_node, p
         base_all_in_one_vm.set_vm_conn_private_key(tmp_private_key)
         base_all_in_one_vm.wait_until_running()
         base_all_in_one_vm.set_vm_private_key(tmp_private_key, remote_private_key)
-        base_all_in_one_private_ip = base_all_in_one_vm.get_private_ip()
-        apt_get_update(public_ip_login_node, base_all_in_one_private_ip, tmp_private_key)
-        install_docker_dependencies(public_ip_login_node, base_all_in_one_private_ip, tmp_private_key)
-        install_nfs_dependencies(public_ip_login_node, base_all_in_one_private_ip, tmp_private_key)
-        mount_nfs(public_ip_login_node, base_all_in_one_private_ip, nfs_ip, nfs_dest, nfs_origin, tmp_private_key,
-                  username="user")
+        apt_get_update(base_all_in_one_vm)
+        install_docker_dependencies(base_all_in_one_vm)
+        install_nfs_dependencies(base_all_in_one_vm)
+        mount_nfs(base_all_in_one_vm, nfs_ip, nfs_dest, nfs_origin)
     except Exception as e:
         print(e)
         base_all_in_one_vm.terminate()

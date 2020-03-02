@@ -132,6 +132,7 @@ class VirtualMachine:
         out, err = run_command_ssh_gateway(conn, base_user, private_ip, command)
         if verbose:
             print(out, err)
+        conn.close()
         return out, err
 
     def get_ip_list(self):

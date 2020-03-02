@@ -36,9 +36,9 @@ def run_command_ssh_gateway(conn, username, ip, command, background=False):
         print(".", end="")
         sys.stdout.flush()
 
+        stdout = StringIO()
+        stderr = StringIO()
         try:
-            stdout = StringIO()
-            stderr = StringIO()
             conn.run(constructed_command, out_stream=stdout, err_stream=stderr)
             print("")
             conn.close()
@@ -65,12 +65,8 @@ def run_command_ssh_gateway(conn, username, ip, command, background=False):
     print("")
 
 
-def mount_nfs(public_ip_login_node, private_ip_node, nfs_ip, nfs_mount_point, nfs_origin, local_private,
-              username="user"):
+def mount_nfs(vm, nfs_ip, nfs_mount_point, nfs_origin):
     print("Waiting until nfs is mounted", end="")
-
-    conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
-                      forward_agent=True)
 
     auto_direct_line = "\"" + nfs_mount_point + \
                        "\t-rw,noatime,rsize=1048576,wsize=1048576,nolock,intr,tcp,actimeo=1800\t" + nfs_ip + ":" + \
@@ -79,22 +75,16 @@ def mount_nfs(public_ip_login_node, private_ip_node, nfs_ip, nfs_mount_point, nf
                      "echo \"/-\t/etc/auto.direct\" | sudo tee -a /etc/auto.master.d/direct.autofs > /dev/null\n" \
                      "echo " + auto_direct_line + " | sudo tee -a /etc/auto.direct > /dev/null\n" \
                      "sudo /etc/init.d/autofs restart"
-    run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
-    conn.close()
+    vm.run_ssh_command(command_to_run)
 
 
-def install_nfs_dependencies(public_ip_login_node, private_ip_node, local_private, username="user"):
+def install_nfs_dependencies(vm):
     print("Waiting until nfs dependencies are installed", end="")
-
-    conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
-                      forward_agent=True)
-
     command_to_run = "sudo apt-get -y --no-install-recommends install nfs-common autofs"
-    run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
-    conn.close()
+    vm.run_ssh_command(command_to_run)
 
 
-def install_docker_dependencies(public_ip_login_node, private_ip_node, local_private, username="user"):
+def install_docker_dependencies(vm):
     print("Waiting until docker dependencies are installed", end="")
     command_to_run = "sudo apt-get remove -y docker docker-engine docker.io containerd runc\n" \
                      "sudo apt-get update\n" \
@@ -111,21 +101,14 @@ def install_docker_dependencies(public_ip_login_node, private_ip_node, local_pri
                      "sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose\n" \
                      "service docker status\n" \
                      "sudo usermod -aG docker ${USER}\n"
-    conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
-                      forward_agent=True)
-    run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
-    conn.close()
+    vm.run_ssh_command(command_to_run)
 
 
-def apt_get_update(public_ip_login_node, private_ip_node, local_private, username="user"):
+def apt_get_update(vm):
     print("Waiting until the machine is reachable by ssh and running secure apt get update", end="")
-
-    conn = Connection(host=public_ip_login_node, user="user", connect_kwargs={"key_filename": local_private},
-                      forward_agent=True)
 
     command_to_run = "pid=$(ps -elfa | grep apt | grep lock_is_held | grep -v grep | " \
                      "awk \\'{ print $4 }\\' | xargs -i echo {});while [[ ! -z \"${pid}\" && -e /proc/${pid} ]]; " \
                      "do sleep 0.1; done;sudo apt-get update;"
 
-    run_command_ssh_gateway(conn, username, private_ip_node, command_to_run)
-    conn.close()
+    vm.run_ssh_command(command_to_run)
