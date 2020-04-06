@@ -1,0 +1,42 @@
+2020-03-30 10:15:31,750 [main] ERROR b.o.s.c.c.ClientMain - {
+  "name" : "ManifestClientException",
+  "message" : "The following files do not exist: \n'/song-client/input/example.vcf.gz.idx',\n'/song-client/input/example.vcf.gz'",
+  "stackTrace" : [
+        "bio.overture.song.sdk.errors.ManifestClientException.checkManifest(ManifestClientException.java:42)",
+        "bio.overture.song.sdk.ManifestClient.generateManifest(ManifestClient.java:59)",
+        "bio.overture.song.client.command.ManifestCommand.run(ManifestCommand.java:58)",
+        "bio.overture.song.client.cli.ClientMain.run(ClientMain.java:95)",
+        "bio.overture.song.client.Main.main(Main.java:30)",
+        "java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)",
+        "java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)",
+        "java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)",
+        "java.base/java.lang.reflect.Method.invoke(Unknown Source)",
+        "org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:47)",
+        "org.springframework.boot.loader.Launcher.launch(Launcher.java:86)",
+        "org.springframework.boot.loader.Launcher.launch(Launcher.java:50)",
+        "org.springframework.boot.loader.JarLauncher.main(JarLauncher.java:51)"
+    ],
+  "timestamp" : 1585563331734,
+  "date" : 1585563331734
+}
+2020-03-30 10:15:31,750 [main] ERROR b.o.s.c.c.ClientMain - {
+  "name" : "ManifestClientException",
+  "message" : "The following files do not exist: \n'/song-client/input/example.vcf.gz.idx',\n'/song-client/input/example.vcf.gz'",
+  "stackTrace" : [
+        "bio.overture.song.sdk.errors.ManifestClientException.checkManifest(ManifestClientException.java:42)",
+        "bio.overture.song.sdk.ManifestClient.generateManifest(ManifestClient.java:59)",
+        "bio.overture.song.client.command.ManifestCommand.run(ManifestCommand.java:58)",
+        "bio.overture.song.client.cli.ClientMain.run(ClientMain.java:95)",
+        "bio.overture.song.client.Main.main(Main.java:30)",
+        "java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)",
+        "java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)",
+        "java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)",
+        "java.base/java.lang.reflect.Method.invoke(Unknown Source)",
+        "org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:47)",
+        "org.springframework.boot.loader.Launcher.launch(Launcher.java:86)",
+        "org.springframework.boot.loader.Launcher.launch(Launcher.java:50)",
+        "org.springframework.boot.loader.JarLauncher.main(JarLauncher.java:51)"
+    ],
+  "timestamp" : 1585563331734,
+  "date" : 1585563331734
+}

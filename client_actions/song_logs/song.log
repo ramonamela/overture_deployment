@@ -1,0 +1,21 @@
+2020-04-06 16:22:17,885 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-04-06 16:24:49,284 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-04-06 16:24:49,294 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-04-06 16:24:49,294 [main] ERROR b.o.s.c.c.ClientMain - ************************************************************
+*                    SONG CLIENT ERROR                     *
+************************************************************
+The SONG server may not be running on 'http://84.88.186.194/song_eucancan_bsc'
+2020-04-06 16:24:49,294 [main] ERROR b.o.s.c.c.ClientMain - ************************************************************
+*                    SONG CLIENT ERROR                     *
+************************************************************
+The SONG server may not be running on 'http://84.88.186.194/song_eucancan_bsc'
+2020-04-06 16:25:21,200 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-04-06 16:25:21,217 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-04-06 16:25:21,219 [main] ERROR b.o.s.c.c.ClientMain - ************************************************************
+*                    SONG CLIENT ERROR                     *
+************************************************************
+The SONG server may not be running on 'http://eucancan.bsc.es/song_eucancan_bsc'
+2020-04-06 16:25:21,219 [main] ERROR b.o.s.c.c.ClientMain - ************************************************************
+*                    SONG CLIENT ERROR                     *
+************************************************************
+The SONG server may not be running on 'http://eucancan.bsc.es/song_eucancan_bsc'

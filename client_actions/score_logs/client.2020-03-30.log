@@ -1,0 +1,774 @@
+2020-03-30 10:40:13,815 [main] INFO  b.o.s.c.ClientMain - Starting ClientMain v2.0.1 on 46fea4dc7d3e with PID 1 (/score-client/lib/score-client.jar started by root in /score-client)
+2020-03-30 10:40:13,817 [main] INFO  b.o.s.c.ClientMain - The following profiles are active: aws
+2020-03-30 10:40:14,740 [main] INFO  b.o.s.c.s.s.ScoreStorageService - **********************LOADED SCORE STORAGE SERVICE
+2020-03-30 10:40:14,868 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+2020-03-30 10:40:14,882 [main] INFO  b.o.s.c.c.ClientBanner - Command:  java -Xmx3G --illegal-access=deny -Dlogging.path=bin/../logs -Dspring.config.additional-location=/score-client/conf/ -Dlogging.config=/score-client/conf/logback.xml -Dclient.directory=/score-client -Dstorage.profile=aws -jar classes! ...
+2020-03-30 10:40:14,882 [main] INFO  b.o.s.c.c.ClientBanner - Version:  2.0.1
+2020-03-30 10:40:14,882 [main] INFO  b.o.s.c.c.ClientBanner - Built:    2.0.1
+2020-03-30 10:40:14,882 [main] INFO  b.o.s.c.c.ClientBanner - SCM:
+2020-03-30 10:40:14,934 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.abbrev    : c27fb06
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.email   : btiernay@oicr.on.ca
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.full : Fixed merge. 
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id           : c27fb064b5cb17ebf6eebc30b04eec4c3eb64662
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.short: Fixed merge.
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.name    : btiernay
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.name     : Unknown
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.describe  : 4.0.8-3-gc27fb06
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.email    : Unknown
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.branch              : origin/develop
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.time         : 11.03.2016 @ 11:22:29 EST
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.remote.origin.url   : git@github.com:icgc-dcc/dcc-common
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.time          : 11.03.2016 @ 11:23:08 EST
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner - Profiles: [aws]
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner - StandardEnvironment {activeProfiles=[aws], defaultProfiles=[default], propertySources=[ConfigurationPropertySourcesPropertySource {name='configurationProperties'}, PropertiesPropertySource {name='systemProperties'}, OriginAwareSystemEnvironmentPropertySource {name='systemEnvironment'}, RandomValuePropertySource {name='random'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #1)'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #0)'}]}:
+2020-03-30 10:40:14,935 [main] INFO  b.o.s.c.c.ClientBanner -          configurationProperties:
+2020-03-30 10:40:14,936 [main] INFO  b.o.s.c.c.ClientBanner -          systemProperties:
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_FILE: target/logs/client.log
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_PATH: bin/../logs
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - PID: 1
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - awt.toolkit: sun.awt.X11.XToolkit
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - client.directory: /score-client
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: false
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: false
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - file.encoding: ANSI_X3.4-1968
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - file.separator: /
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.graphicsenv: sun.awt.X11GraphicsEnvironment
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.headless: true
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.printerjob: sun.print.PSPrinterJob
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.path: bin/../conf:bin/../lib/score-client.jar
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.version: 55.0
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.home: /usr/lib/jvm/jdk-11
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.io.tmpdir: /tmp
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.protocol.handler.pkgs: org.springframework.boot.loader
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.name: OpenJDK Runtime Environment
+2020-03-30 10:40:14,940 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.version: 11+28
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.name: Java Platform API Specification
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.vendor: Oracle Corporation
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.version: 11
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor: Oracle Corporation
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url: http://java.oracle.com/
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url.bug: http://bugreport.java.com/bugreport/
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.version: 18.9
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version: 11
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version.date: 2018-09-25
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.compressedOopsMode: Zero based
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.info: mixed mode
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.name: OpenJDK 64-Bit Server VM
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.name: Java Virtual Machine Specification
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.vendor: Oracle Corporation
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.version: 11
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.vendor: Oracle Corporation
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.version: 11+28
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - jdk.debug: release
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - jline.terminal: jline.UnsupportedTerminal
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - line.separator: 
+
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.config: /score-client/conf/logback.xml
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.path: bin/../logs
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - os.arch: amd64
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - os.name: Linux
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - os.version: 4.15.0-54-generic
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - path.separator: :
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.beaninfo.ignore: true
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.config.additional-location: /score-client/conf/
+2020-03-30 10:40:14,941 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.profile: aws
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.arch.data.model: 64
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.boot.library.path: /usr/lib/jvm/jdk-11/lib
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.endian: little
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.isalist: 
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.io.unicode.encoding: UnicodeLittle
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.command: org.springframework.boot.loader.JarLauncher upload --manifest /song-client/output/manifest.txt
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.launcher: SUN_STANDARD
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.jnu.encoding: ANSI_X3.4-1968
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.management.compiler: HotSpot 64-Bit Tiered Compilers
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultConnectTimeout: 60000
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultReadTimeout: 60000
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.os.patch.level: unknown
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - user.country: US
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - user.dir: /score-client
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - user.home: /root
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - user.language: en
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - user.name: root
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - user.timezone: GMT
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #1):
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 10:40:14,942 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://virginia.song.icgc.org
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.profiles: aws
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: https://virginia.cloud.icgc.org
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #0):
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - client.accessToken: ${accessToken:}
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ansi: ${ansi:true}
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - client.connectTimeoutSeconds: 60
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: ${quiet:false}
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - client.readTimeoutSeconds: 60
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: ${silent:false}
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.expiration: 86400
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.partSize: 1073741824
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.url: https://data.kidsfirstdrc.org
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.token.url: https://v2i1r42t6d.execute-api.us-east-1.amazonaws.com/beta/token
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - kfportal.url: https://arranger.kids-first.io/june_13/graphql
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.file: target/logs/client.log
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://song.cancercollaboratory.org
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - mount.logging: false
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - portal.url: https://dcc.icgc.org
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryNumber: 10
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryTimeout: 1
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: http://localhost:5431
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - token.public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlvqX7PDezX7BC0yc14zwJw2qgs5KDyZZvEeNowHCgHLcCtCVZ2JIx+ccUPp1FVudfZpLoboZ3RjT+6oOPHpNilXqUZfT81acCVHhvyJe7FNxdUWKpIIVKM/8bJj1pVkst0YHLBJ3KojZYJCMNUxUkyHM+yGrn9tmSdFBmwJnBLTkSxOrS2bvuZvkjERnoQJCoTm2XBKoCOzEuVPjIeB2KiFcNqiZwhjnCSQGPmg7fyJfQt1vMl+8RST3IXxphf8KKaWMl0rTXQhIHYL23P/tvC2lpJgx0rzgnxkAgFSrCxLstIklFAAg+j7ykivOyynIlCfXGv4cPTq5UqvIB8MBRQIDAQAB
+2020-03-30 10:40:14,943 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.fileFrom: memory
+2020-03-30 10:40:14,944 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.memory: 1
+2020-03-30 10:40:14,944 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.parallel: 6
+2020-03-30 10:40:14,944 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+
+
+2020-03-30 10:40:14,971 [main] INFO  b.o.s.c.ClientMain - Started ClientMain in 1.739 seconds (JVM running for 2.785)
+2020-03-30 10:40:15,987 [main] WARN  b.o.s.c.e.ServiceRetryableResponseErrorHandler - Bad request. Stop processing: 
+2020-03-30 10:40:16,000 [main] ERROR b.o.s.c.s.s.ScoreStorageService - java.io.IOException: Storage client error: {"timestamp":"2020-03-30T10:40:05.590+0000","status":404,"error":"Not Found","message":"No message available","path":"/score_eucancan_bsc/download/ping"}
+2020-03-30 10:40:16,015 [main] ERROR b.o.s.c.ClientMain - Unknown error: 
+bio.overture.score.client.exception.NotRetryableException: java.io.IOException: Storage client error: {"timestamp":"2020-03-30T10:40:05.590+0000","status":404,"error":"Not Found","message":"No message available","path":"/score_eucancan_bsc/download/ping"}
+	at bio.overture.score.client.exception.ControlExceptionFactory.notRetryableException(ControlExceptionFactory.java:43)
+	at bio.overture.score.client.exception.ServiceRetryableResponseErrorHandler.handleError(ServiceRetryableResponseErrorHandler.java:40)
+	at org.springframework.web.client.ResponseErrorHandler.handleError(ResponseErrorHandler.java:63)
+	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:778)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:736)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:670)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:579)
+	at bio.overture.score.client.storage.score.ScoreStorageService.ping(ScoreStorageService.java:291)
+	at bio.overture.score.client.command.RepositoryAccessCommand.verifyRepoConnection(RepositoryAccessCommand.java:32)
+	at bio.overture.score.client.command.UploadCommand.execute(UploadCommand.java:76)
+	at bio.overture.score.client.ClientMain.run(ClientMain.java:133)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:779)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:763)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:139)
+	at bio.overture.score.client.ClientMain.main(ClientMain.java:106)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:47)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:86)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:50)
+	at org.springframework.boot.loader.JarLauncher.main(JarLauncher.java:51)
+Caused by: java.io.IOException: Storage client error: {"timestamp":"2020-03-30T10:40:05.590+0000","status":404,"error":"Not Found","message":"No message available","path":"/score_eucancan_bsc/download/ping"}
+	... 24 common frames omitted
+2020-03-30 10:44:51,412 [main] INFO  b.o.s.c.ClientMain - Starting ClientMain v2.0.1 on 458b3445bf67 with PID 1 (/score-client/lib/score-client.jar started by root in /score-client)
+2020-03-30 10:44:51,414 [main] INFO  b.o.s.c.ClientMain - The following profiles are active: aws
+2020-03-30 10:44:52,318 [main] INFO  b.o.s.c.s.s.ScoreStorageService - **********************LOADED SCORE STORAGE SERVICE
+2020-03-30 10:44:52,408 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+2020-03-30 10:44:52,419 [main] INFO  b.o.s.c.c.ClientBanner - Command:  java -Xmx3G --illegal-access=deny -Dlogging.path=bin/../logs -Dspring.config.additional-location=/score-client/conf/ -Dlogging.config=/score-client/conf/logback.xml -Dclient.directory=/score-client -Dstorage.profile=aws -jar classes! ...
+2020-03-30 10:44:52,419 [main] INFO  b.o.s.c.c.ClientBanner - Version:  2.0.1
+2020-03-30 10:44:52,419 [main] INFO  b.o.s.c.c.ClientBanner - Built:    2.0.1
+2020-03-30 10:44:52,419 [main] INFO  b.o.s.c.c.ClientBanner - SCM:
+2020-03-30 10:44:52,489 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.abbrev    : c27fb06
+2020-03-30 10:44:52,489 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.email   : btiernay@oicr.on.ca
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.full : Fixed merge. 
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id           : c27fb064b5cb17ebf6eebc30b04eec4c3eb64662
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.short: Fixed merge.
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.name    : btiernay
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.name     : Unknown
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.describe  : 4.0.8-3-gc27fb06
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.email    : Unknown
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.branch              : origin/develop
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.time         : 11.03.2016 @ 11:22:29 EST
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.remote.origin.url   : git@github.com:icgc-dcc/dcc-common
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.time          : 11.03.2016 @ 11:23:08 EST
+2020-03-30 10:44:52,490 [main] INFO  b.o.s.c.c.ClientBanner - Profiles: [aws]
+2020-03-30 10:44:52,491 [main] INFO  b.o.s.c.c.ClientBanner - StandardEnvironment {activeProfiles=[aws], defaultProfiles=[default], propertySources=[ConfigurationPropertySourcesPropertySource {name='configurationProperties'}, PropertiesPropertySource {name='systemProperties'}, OriginAwareSystemEnvironmentPropertySource {name='systemEnvironment'}, RandomValuePropertySource {name='random'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #1)'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #0)'}]}:
+2020-03-30 10:44:52,491 [main] INFO  b.o.s.c.c.ClientBanner -          configurationProperties:
+2020-03-30 10:44:52,491 [main] INFO  b.o.s.c.c.ClientBanner -          systemProperties:
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_FILE: target/logs/client.log
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_PATH: bin/../logs
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - PID: 1
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - awt.toolkit: sun.awt.X11.XToolkit
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - client.directory: /score-client
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: false
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: false
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - file.encoding: ANSI_X3.4-1968
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - file.separator: /
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.graphicsenv: sun.awt.X11GraphicsEnvironment
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.headless: true
+2020-03-30 10:44:52,497 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.printerjob: sun.print.PSPrinterJob
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.path: bin/../conf:bin/../lib/score-client.jar
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.version: 55.0
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.home: /usr/lib/jvm/jdk-11
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.io.tmpdir: /tmp
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.protocol.handler.pkgs: org.springframework.boot.loader
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.name: OpenJDK Runtime Environment
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.version: 11+28
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.name: Java Platform API Specification
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.vendor: Oracle Corporation
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.version: 11
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor: Oracle Corporation
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url: http://java.oracle.com/
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url.bug: http://bugreport.java.com/bugreport/
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.version: 18.9
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version: 11
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version.date: 2018-09-25
+2020-03-30 10:44:52,498 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.compressedOopsMode: Zero based
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.info: mixed mode
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.name: OpenJDK 64-Bit Server VM
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.name: Java Virtual Machine Specification
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.vendor: Oracle Corporation
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.version: 11
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.vendor: Oracle Corporation
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.version: 11+28
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - jdk.debug: release
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - jline.terminal: jline.UnsupportedTerminal
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - line.separator: 
+
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.config: /score-client/conf/logback.xml
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.path: bin/../logs
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - os.arch: amd64
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - os.name: Linux
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - os.version: 4.15.0-54-generic
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - path.separator: :
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.beaninfo.ignore: true
+2020-03-30 10:44:52,499 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.config.additional-location: /score-client/conf/
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.profile: aws
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.arch.data.model: 64
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.boot.library.path: /usr/lib/jvm/jdk-11/lib
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.endian: little
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.isalist: 
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.io.unicode.encoding: UnicodeLittle
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.command: org.springframework.boot.loader.JarLauncher upload --manifest /song-client/output/manifest.txt
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.launcher: SUN_STANDARD
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.jnu.encoding: ANSI_X3.4-1968
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.management.compiler: HotSpot 64-Bit Tiered Compilers
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultConnectTimeout: 60000
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultReadTimeout: 60000
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.os.patch.level: unknown
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - user.country: US
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - user.dir: /score-client
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - user.home: /root
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - user.language: en
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - user.name: root
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -             - user.timezone: GMT
+2020-03-30 10:44:52,500 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #1):
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://virginia.song.icgc.org
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.profiles: aws
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: https://virginia.cloud.icgc.org
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #0):
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - client.accessToken: ${accessToken:}
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ansi: ${ansi:true}
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - client.connectTimeoutSeconds: 60
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: ${quiet:false}
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - client.readTimeoutSeconds: 60
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: ${silent:false}
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.expiration: 86400
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.partSize: 1073741824
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.url: https://data.kidsfirstdrc.org
+2020-03-30 10:44:52,501 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.token.url: https://v2i1r42t6d.execute-api.us-east-1.amazonaws.com/beta/token
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - kfportal.url: https://arranger.kids-first.io/june_13/graphql
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.file: target/logs/client.log
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://song.cancercollaboratory.org
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - mount.logging: false
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - portal.url: https://dcc.icgc.org
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryNumber: 10
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryTimeout: 1
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: http://localhost:5431
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - token.public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlvqX7PDezX7BC0yc14zwJw2qgs5KDyZZvEeNowHCgHLcCtCVZ2JIx+ccUPp1FVudfZpLoboZ3RjT+6oOPHpNilXqUZfT81acCVHhvyJe7FNxdUWKpIIVKM/8bJj1pVkst0YHLBJ3KojZYJCMNUxUkyHM+yGrn9tmSdFBmwJnBLTkSxOrS2bvuZvkjERnoQJCoTm2XBKoCOzEuVPjIeB2KiFcNqiZwhjnCSQGPmg7fyJfQt1vMl+8RST3IXxphf8KKaWMl0rTXQhIHYL23P/tvC2lpJgx0rzgnxkAgFSrCxLstIklFAAg+j7ykivOyynIlCfXGv4cPTq5UqvIB8MBRQIDAQAB
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.fileFrom: memory
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.memory: 1
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.parallel: 6
+2020-03-30 10:44:52,502 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+
+
+2020-03-30 10:44:52,537 [main] INFO  b.o.s.c.ClientMain - Started ClientMain in 1.636 seconds (JVM running for 2.339)
+2020-03-30 10:44:52,720 [main] WARN  b.o.s.c.e.ServiceRetryableResponseErrorHandler - Bad request. Stop processing: 
+2020-03-30 10:44:52,730 [main] ERROR b.o.s.c.s.s.ScoreStorageService - java.io.IOException: Storage client error: {"timestamp":"2020-03-30T10:44:42.405+0000","status":404,"error":"Not Found","message":"No message available","path":"/score_eucancan_bsc/download/ping"}
+2020-03-30 10:44:52,731 [main] ERROR b.o.s.c.ClientMain - Unknown error: 
+bio.overture.score.client.exception.NotRetryableException: java.io.IOException: Storage client error: {"timestamp":"2020-03-30T10:44:42.405+0000","status":404,"error":"Not Found","message":"No message available","path":"/score_eucancan_bsc/download/ping"}
+	at bio.overture.score.client.exception.ControlExceptionFactory.notRetryableException(ControlExceptionFactory.java:43)
+	at bio.overture.score.client.exception.ServiceRetryableResponseErrorHandler.handleError(ServiceRetryableResponseErrorHandler.java:40)
+	at org.springframework.web.client.ResponseErrorHandler.handleError(ResponseErrorHandler.java:63)
+	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:778)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:736)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:670)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:579)
+	at bio.overture.score.client.storage.score.ScoreStorageService.ping(ScoreStorageService.java:291)
+	at bio.overture.score.client.command.RepositoryAccessCommand.verifyRepoConnection(RepositoryAccessCommand.java:32)
+	at bio.overture.score.client.command.UploadCommand.execute(UploadCommand.java:76)
+	at bio.overture.score.client.ClientMain.run(ClientMain.java:133)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:779)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:763)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:139)
+	at bio.overture.score.client.ClientMain.main(ClientMain.java:106)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:47)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:86)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:50)
+	at org.springframework.boot.loader.JarLauncher.main(JarLauncher.java:51)
+Caused by: java.io.IOException: Storage client error: {"timestamp":"2020-03-30T10:44:42.405+0000","status":404,"error":"Not Found","message":"No message available","path":"/score_eucancan_bsc/download/ping"}
+	... 24 common frames omitted
+2020-03-30 13:03:29,639 [main] INFO  b.o.s.c.ClientMain - Starting ClientMain v2.0.1 on 811f9f5d5f3e with PID 1 (/score-client/lib/score-client.jar started by root in /score-client)
+2020-03-30 13:03:29,652 [main] INFO  b.o.s.c.ClientMain - The following profiles are active: aws
+2020-03-30 13:03:31,115 [main] INFO  b.o.s.c.s.s.ScoreStorageService - **********************LOADED SCORE STORAGE SERVICE
+2020-03-30 13:03:31,211 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+2020-03-30 13:03:31,221 [main] INFO  b.o.s.c.c.ClientBanner - Command:  java -Xmx3G --illegal-access=deny -Dlogging.path=bin/../logs -Dspring.config.additional-location=/score-client/conf/ -Dlogging.config=/score-client/conf/logback.xml -Dclient.directory=/score-client -Dstorage.profile=aws -jar classes! ...
+2020-03-30 13:03:31,221 [main] INFO  b.o.s.c.c.ClientBanner - Version:  2.0.1
+2020-03-30 13:03:31,221 [main] INFO  b.o.s.c.c.ClientBanner - Built:    2.0.1
+2020-03-30 13:03:31,221 [main] INFO  b.o.s.c.c.ClientBanner - SCM:
+2020-03-30 13:03:31,293 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.abbrev    : c27fb06
+2020-03-30 13:03:31,293 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.email   : btiernay@oicr.on.ca
+2020-03-30 13:03:31,293 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.full : Fixed merge. 
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id           : c27fb064b5cb17ebf6eebc30b04eec4c3eb64662
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.short: Fixed merge.
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.name    : btiernay
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.name     : Unknown
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.describe  : 4.0.8-3-gc27fb06
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.email    : Unknown
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.branch              : origin/develop
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.time         : 11.03.2016 @ 11:22:29 EST
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.remote.origin.url   : git@github.com:icgc-dcc/dcc-common
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.time          : 11.03.2016 @ 11:23:08 EST
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner - Profiles: [aws]
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner - StandardEnvironment {activeProfiles=[aws], defaultProfiles=[default], propertySources=[ConfigurationPropertySourcesPropertySource {name='configurationProperties'}, PropertiesPropertySource {name='systemProperties'}, OriginAwareSystemEnvironmentPropertySource {name='systemEnvironment'}, RandomValuePropertySource {name='random'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #1)'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #0)'}]}:
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          configurationProperties:
+2020-03-30 13:03:31,294 [main] INFO  b.o.s.c.c.ClientBanner -          systemProperties:
+2020-03-30 13:03:31,300 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_FILE: target/logs/client.log
+2020-03-30 13:03:31,300 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_PATH: bin/../logs
+2020-03-30 13:03:31,300 [main] INFO  b.o.s.c.c.ClientBanner -             - PID: 1
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - awt.toolkit: sun.awt.X11.XToolkit
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - client.directory: /score-client
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: false
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: false
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - file.encoding: ANSI_X3.4-1968
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - file.separator: /
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.graphicsenv: sun.awt.X11GraphicsEnvironment
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.headless: true
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.printerjob: sun.print.PSPrinterJob
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.path: bin/../conf:bin/../lib/score-client.jar
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.version: 55.0
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.home: /usr/lib/jvm/jdk-11
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.io.tmpdir: /tmp
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.protocol.handler.pkgs: org.springframework.boot.loader
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.name: OpenJDK Runtime Environment
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.version: 11+28
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.name: Java Platform API Specification
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.vendor: Oracle Corporation
+2020-03-30 13:03:31,301 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.version: 11
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor: Oracle Corporation
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url: http://java.oracle.com/
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url.bug: http://bugreport.java.com/bugreport/
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.version: 18.9
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version: 11
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version.date: 2018-09-25
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.compressedOopsMode: Zero based
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.info: mixed mode
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.name: OpenJDK 64-Bit Server VM
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.name: Java Virtual Machine Specification
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.vendor: Oracle Corporation
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.version: 11
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.vendor: Oracle Corporation
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.version: 11+28
+2020-03-30 13:03:31,302 [main] INFO  b.o.s.c.c.ClientBanner -             - jdk.debug: release
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - jline.terminal: jline.UnsupportedTerminal
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - line.separator: 
+
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.config: /score-client/conf/logback.xml
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.path: bin/../logs
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - os.arch: amd64
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - os.name: Linux
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - os.version: 4.15.0-54-generic
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - path.separator: :
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.beaninfo.ignore: true
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.config.additional-location: /score-client/conf/
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.profile: aws
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.arch.data.model: 64
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.boot.library.path: /usr/lib/jvm/jdk-11/lib
+2020-03-30 13:03:31,303 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.endian: little
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.isalist: 
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.io.unicode.encoding: UnicodeLittle
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.command: org.springframework.boot.loader.JarLauncher upload --manifest /song-client/output/manifest.txt --force
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.launcher: SUN_STANDARD
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.jnu.encoding: ANSI_X3.4-1968
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.management.compiler: HotSpot 64-Bit Tiered Compilers
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultConnectTimeout: 60000
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultReadTimeout: 60000
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.os.patch.level: unknown
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - user.country: US
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - user.dir: /score-client
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - user.home: /root
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - user.language: en
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - user.name: root
+2020-03-30 13:03:31,304 [main] INFO  b.o.s.c.c.ClientBanner -             - user.timezone: GMT
+2020-03-30 13:03:31,305 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #1):
+2020-03-30 13:03:31,305 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 13:03:31,305 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 13:03:31,305 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://virginia.song.icgc.org
+2020-03-30 13:03:31,305 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.profiles: aws
+2020-03-30 13:03:31,305 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: https://virginia.cloud.icgc.org
+2020-03-30 13:03:31,305 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #0):
+2020-03-30 13:03:31,305 [main] INFO  b.o.s.c.c.ClientBanner -             - client.accessToken: ${accessToken:}
+2020-03-30 13:03:31,306 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ansi: ${ansi:true}
+2020-03-30 13:03:31,306 [main] INFO  b.o.s.c.c.ClientBanner -             - client.connectTimeoutSeconds: 60
+2020-03-30 13:03:31,307 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: ${quiet:false}
+2020-03-30 13:03:31,307 [main] INFO  b.o.s.c.c.ClientBanner -             - client.readTimeoutSeconds: 60
+2020-03-30 13:03:31,307 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: ${silent:false}
+2020-03-30 13:03:31,307 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 13:03:31,307 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.expiration: 86400
+2020-03-30 13:03:31,307 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.partSize: 1073741824
+2020-03-30 13:03:31,307 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.url: https://data.kidsfirstdrc.org
+2020-03-30 13:03:31,307 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.token.url: https://v2i1r42t6d.execute-api.us-east-1.amazonaws.com/beta/token
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - kfportal.url: https://arranger.kids-first.io/june_13/graphql
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.file: target/logs/client.log
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://song.cancercollaboratory.org
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - mount.logging: false
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - portal.url: https://dcc.icgc.org
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryNumber: 10
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryTimeout: 1
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: http://localhost:5431
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - token.public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlvqX7PDezX7BC0yc14zwJw2qgs5KDyZZvEeNowHCgHLcCtCVZ2JIx+ccUPp1FVudfZpLoboZ3RjT+6oOPHpNilXqUZfT81acCVHhvyJe7FNxdUWKpIIVKM/8bJj1pVkst0YHLBJ3KojZYJCMNUxUkyHM+yGrn9tmSdFBmwJnBLTkSxOrS2bvuZvkjERnoQJCoTm2XBKoCOzEuVPjIeB2KiFcNqiZwhjnCSQGPmg7fyJfQt1vMl+8RST3IXxphf8KKaWMl0rTXQhIHYL23P/tvC2lpJgx0rzgnxkAgFSrCxLstIklFAAg+j7ykivOyynIlCfXGv4cPTq5UqvIB8MBRQIDAQAB
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.fileFrom: memory
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.memory: 1
+2020-03-30 13:03:31,308 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.parallel: 6
+2020-03-30 13:03:31,309 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+
+
+2020-03-30 13:03:31,408 [main] INFO  b.o.s.c.ClientMain - Started ClientMain in 2.492 seconds (JVM running for 3.647)
+2020-03-30 13:03:31,643 [main] WARN  b.o.s.c.e.ServiceRetryableResponseErrorHandler - Bad request. Stop processing: 
+2020-03-30 13:03:31,666 [main] ERROR b.o.s.c.s.s.ScoreStorageService - java.io.IOException: Storage client error: {"timestamp":"2020-03-30T13:03:21.269+0000","status":404,"error":"Not Found","message":"No message available","path":"/score_eucancan_bsc/download/ping"}
+2020-03-30 13:03:31,685 [main] ERROR b.o.s.c.ClientMain - Unknown error: 
+bio.overture.score.client.exception.NotRetryableException: java.io.IOException: Storage client error: {"timestamp":"2020-03-30T13:03:21.269+0000","status":404,"error":"Not Found","message":"No message available","path":"/score_eucancan_bsc/download/ping"}
+	at bio.overture.score.client.exception.ControlExceptionFactory.notRetryableException(ControlExceptionFactory.java:43)
+	at bio.overture.score.client.exception.ServiceRetryableResponseErrorHandler.handleError(ServiceRetryableResponseErrorHandler.java:40)
+	at org.springframework.web.client.ResponseErrorHandler.handleError(ResponseErrorHandler.java:63)
+	at org.springframework.web.client.RestTemplate.handleResponse(RestTemplate.java:778)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:736)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:670)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:579)
+	at bio.overture.score.client.storage.score.ScoreStorageService.ping(ScoreStorageService.java:291)
+	at bio.overture.score.client.command.RepositoryAccessCommand.verifyRepoConnection(RepositoryAccessCommand.java:32)
+	at bio.overture.score.client.command.UploadCommand.execute(UploadCommand.java:76)
+	at bio.overture.score.client.ClientMain.run(ClientMain.java:133)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:779)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:763)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:139)
+	at bio.overture.score.client.ClientMain.main(ClientMain.java:106)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:47)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:86)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:50)
+	at org.springframework.boot.loader.JarLauncher.main(JarLauncher.java:51)
+Caused by: java.io.IOException: Storage client error: {"timestamp":"2020-03-30T13:03:21.269+0000","status":404,"error":"Not Found","message":"No message available","path":"/score_eucancan_bsc/download/ping"}
+	... 24 common frames omitted
+2020-03-30 13:12:20,670 [main] INFO  b.o.s.c.ClientMain - Starting ClientMain v2.0.1 on 9e3cc6176d74 with PID 1 (/score-client/lib/score-client.jar started by root in /score-client)
+2020-03-30 13:12:20,672 [main] INFO  b.o.s.c.ClientMain - The following profiles are active: aws
+2020-03-30 13:12:21,549 [main] INFO  b.o.s.c.s.s.ScoreStorageService - **********************LOADED SCORE STORAGE SERVICE
+2020-03-30 13:12:21,661 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+2020-03-30 13:12:21,672 [main] INFO  b.o.s.c.c.ClientBanner - Command:  java -Xmx3G --illegal-access=deny -Dlogging.path=bin/../logs -Dspring.config.additional-location=/score-client/conf/ -Dlogging.config=/score-client/conf/logback.xml -Dclient.directory=/score-client -Dstorage.profile=aws -jar classes! ...
+2020-03-30 13:12:21,672 [main] INFO  b.o.s.c.c.ClientBanner - Version:  2.0.1
+2020-03-30 13:12:21,672 [main] INFO  b.o.s.c.c.ClientBanner - Built:    2.0.1
+2020-03-30 13:12:21,672 [main] INFO  b.o.s.c.c.ClientBanner - SCM:
+2020-03-30 13:12:21,725 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.abbrev    : c27fb06
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.email   : btiernay@oicr.on.ca
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.full : Fixed merge. 
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id           : c27fb064b5cb17ebf6eebc30b04eec4c3eb64662
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.short: Fixed merge.
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.name    : btiernay
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.name     : Unknown
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.describe  : 4.0.8-3-gc27fb06
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.email    : Unknown
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.branch              : origin/develop
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.time         : 11.03.2016 @ 11:22:29 EST
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.remote.origin.url   : git@github.com:icgc-dcc/dcc-common
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.time          : 11.03.2016 @ 11:23:08 EST
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner - Profiles: [aws]
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner - StandardEnvironment {activeProfiles=[aws], defaultProfiles=[default], propertySources=[ConfigurationPropertySourcesPropertySource {name='configurationProperties'}, PropertiesPropertySource {name='systemProperties'}, OriginAwareSystemEnvironmentPropertySource {name='systemEnvironment'}, RandomValuePropertySource {name='random'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #1)'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #0)'}]}:
+2020-03-30 13:12:21,726 [main] INFO  b.o.s.c.c.ClientBanner -          configurationProperties:
+2020-03-30 13:12:21,727 [main] INFO  b.o.s.c.c.ClientBanner -          systemProperties:
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_FILE: target/logs/client.log
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_PATH: bin/../logs
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - PID: 1
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - awt.toolkit: sun.awt.X11.XToolkit
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - client.directory: /score-client
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: false
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: false
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - file.encoding: ANSI_X3.4-1968
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - file.separator: /
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.graphicsenv: sun.awt.X11GraphicsEnvironment
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.headless: true
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.printerjob: sun.print.PSPrinterJob
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.path: bin/../conf:bin/../lib/score-client.jar
+2020-03-30 13:12:21,731 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.version: 55.0
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.home: /usr/lib/jvm/jdk-11
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.io.tmpdir: /tmp
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.protocol.handler.pkgs: org.springframework.boot.loader
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.name: OpenJDK Runtime Environment
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.version: 11+28
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.name: Java Platform API Specification
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.vendor: Oracle Corporation
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.version: 11
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor: Oracle Corporation
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url: http://java.oracle.com/
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url.bug: http://bugreport.java.com/bugreport/
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.version: 18.9
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version: 11
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version.date: 2018-09-25
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.compressedOopsMode: Zero based
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.info: mixed mode
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.name: OpenJDK 64-Bit Server VM
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.name: Java Virtual Machine Specification
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.vendor: Oracle Corporation
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.version: 11
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.vendor: Oracle Corporation
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.version: 11+28
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - jdk.debug: release
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - jline.terminal: jline.UnsupportedTerminal
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - line.separator: 
+
+2020-03-30 13:12:21,732 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.config: /score-client/conf/logback.xml
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.path: bin/../logs
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - os.arch: amd64
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - os.name: Linux
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - os.version: 4.15.0-54-generic
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - path.separator: :
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.beaninfo.ignore: true
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.config.additional-location: /score-client/conf/
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.profile: aws
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.arch.data.model: 64
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.boot.library.path: /usr/lib/jvm/jdk-11/lib
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.endian: little
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.isalist: 
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.io.unicode.encoding: UnicodeLittle
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.command: org.springframework.boot.loader.JarLauncher upload --manifest /song-client/output/manifest.txt --force
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.launcher: SUN_STANDARD
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.jnu.encoding: ANSI_X3.4-1968
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.management.compiler: HotSpot 64-Bit Tiered Compilers
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultConnectTimeout: 60000
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultReadTimeout: 60000
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.os.patch.level: unknown
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - user.country: US
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - user.dir: /score-client
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - user.home: /root
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - user.language: en
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - user.name: root
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -             - user.timezone: GMT
+2020-03-30 13:12:21,733 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #1):
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://virginia.song.icgc.org
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.profiles: aws
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: https://virginia.cloud.icgc.org
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #0):
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - client.accessToken: ${accessToken:}
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ansi: ${ansi:true}
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - client.connectTimeoutSeconds: 60
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: ${quiet:false}
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - client.readTimeoutSeconds: 60
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: ${silent:false}
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.expiration: 86400
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.partSize: 1073741824
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.url: https://data.kidsfirstdrc.org
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.token.url: https://v2i1r42t6d.execute-api.us-east-1.amazonaws.com/beta/token
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - kfportal.url: https://arranger.kids-first.io/june_13/graphql
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.file: target/logs/client.log
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://song.cancercollaboratory.org
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - mount.logging: false
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - portal.url: https://dcc.icgc.org
+2020-03-30 13:12:21,734 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryNumber: 10
+2020-03-30 13:12:21,735 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryTimeout: 1
+2020-03-30 13:12:21,735 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: http://localhost:5431
+2020-03-30 13:12:21,735 [main] INFO  b.o.s.c.c.ClientBanner -             - token.public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlvqX7PDezX7BC0yc14zwJw2qgs5KDyZZvEeNowHCgHLcCtCVZ2JIx+ccUPp1FVudfZpLoboZ3RjT+6oOPHpNilXqUZfT81acCVHhvyJe7FNxdUWKpIIVKM/8bJj1pVkst0YHLBJ3KojZYJCMNUxUkyHM+yGrn9tmSdFBmwJnBLTkSxOrS2bvuZvkjERnoQJCoTm2XBKoCOzEuVPjIeB2KiFcNqiZwhjnCSQGPmg7fyJfQt1vMl+8RST3IXxphf8KKaWMl0rTXQhIHYL23P/tvC2lpJgx0rzgnxkAgFSrCxLstIklFAAg+j7ykivOyynIlCfXGv4cPTq5UqvIB8MBRQIDAQAB
+2020-03-30 13:12:21,735 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.fileFrom: memory
+2020-03-30 13:12:21,735 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.memory: 1
+2020-03-30 13:12:21,735 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.parallel: 6
+2020-03-30 13:12:21,735 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+
+
+2020-03-30 13:12:21,763 [main] INFO  b.o.s.c.ClientMain - Started ClientMain in 1.617 seconds (JVM running for 2.316)
+2020-03-30 13:12:26,924 [main] ERROR b.o.s.c.s.s.ScoreStorageService - Unable to connect to repository endpoint. Verify your network connection. You also need to be running on a compute node within the repository cloud.
+2020-03-30 13:12:26,928 [main] ERROR b.o.s.c.ClientMain - Unknown error: 
+bio.overture.score.client.exception.NotRetryableException: java.io.IOException: Access refused by repository. Ensure client is running as part of repository cloud.
+	at bio.overture.score.client.storage.score.ScoreStorageService.ping(ScoreStorageService.java:307)
+	at bio.overture.score.client.command.RepositoryAccessCommand.verifyRepoConnection(RepositoryAccessCommand.java:32)
+	at bio.overture.score.client.command.UploadCommand.execute(UploadCommand.java:76)
+	at bio.overture.score.client.ClientMain.run(ClientMain.java:133)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:779)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:763)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:139)
+	at bio.overture.score.client.ClientMain.main(ClientMain.java:106)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:47)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:86)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:50)
+	at org.springframework.boot.loader.JarLauncher.main(JarLauncher.java:51)
+Caused by: java.io.IOException: Access refused by repository. Ensure client is running as part of repository cloud.
+	... 17 common frames omitted
+2020-03-30 13:14:16,398 [main] INFO  b.o.s.c.ClientMain - Starting ClientMain v2.0.1 on 0f9143ab40eb with PID 1 (/score-client/lib/score-client.jar started by root in /score-client)
+2020-03-30 13:14:16,400 [main] INFO  b.o.s.c.ClientMain - The following profiles are active: aws
+2020-03-30 13:14:17,205 [main] INFO  b.o.s.c.s.s.ScoreStorageService - **********************LOADED SCORE STORAGE SERVICE
+2020-03-30 13:14:17,285 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+2020-03-30 13:14:17,309 [main] INFO  b.o.s.c.c.ClientBanner - Command:  java -Xmx3G --illegal-access=deny -Dlogging.path=bin/../logs -Dspring.config.additional-location=/score-client/conf/ -Dlogging.config=/score-client/conf/logback.xml -Dclient.directory=/score-client -Dstorage.profile=aws -jar classes! ...
+2020-03-30 13:14:17,309 [main] INFO  b.o.s.c.c.ClientBanner - Version:  2.0.1
+2020-03-30 13:14:17,309 [main] INFO  b.o.s.c.c.ClientBanner - Built:    2.0.1
+2020-03-30 13:14:17,309 [main] INFO  b.o.s.c.c.ClientBanner - SCM:
+2020-03-30 13:14:17,379 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.abbrev    : c27fb06
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.email   : btiernay@oicr.on.ca
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.full : Fixed merge. 
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id           : c27fb064b5cb17ebf6eebc30b04eec4c3eb64662
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.message.short: Fixed merge.
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.user.name    : btiernay
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.name     : Unknown
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.id.describe  : 4.0.8-3-gc27fb06
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.user.email    : Unknown
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.branch              : origin/develop
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.commit.time         : 11.03.2016 @ 11:22:29 EST
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.remote.origin.url   : git@github.com:icgc-dcc/dcc-common
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          git.build.time          : 11.03.2016 @ 11:23:08 EST
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner - Profiles: [aws]
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner - StandardEnvironment {activeProfiles=[aws], defaultProfiles=[default], propertySources=[ConfigurationPropertySourcesPropertySource {name='configurationProperties'}, PropertiesPropertySource {name='systemProperties'}, OriginAwareSystemEnvironmentPropertySource {name='systemEnvironment'}, RandomValuePropertySource {name='random'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #1)'}, OriginTrackedMapPropertySource {name='applicationConfig: [classpath:/application.yml] (document #0)'}]}:
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          configurationProperties:
+2020-03-30 13:14:17,380 [main] INFO  b.o.s.c.c.ClientBanner -          systemProperties:
+2020-03-30 13:14:17,384 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_FILE: target/logs/client.log
+2020-03-30 13:14:17,384 [main] INFO  b.o.s.c.c.ClientBanner -             - LOG_PATH: bin/../logs
+2020-03-30 13:14:17,384 [main] INFO  b.o.s.c.c.ClientBanner -             - PID: 1
+2020-03-30 13:14:17,384 [main] INFO  b.o.s.c.c.ClientBanner -             - awt.toolkit: sun.awt.X11.XToolkit
+2020-03-30 13:14:17,384 [main] INFO  b.o.s.c.c.ClientBanner -             - client.directory: /score-client
+2020-03-30 13:14:17,384 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: false
+2020-03-30 13:14:17,384 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: false
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - file.encoding: ANSI_X3.4-1968
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - file.separator: /
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.graphicsenv: sun.awt.X11GraphicsEnvironment
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.headless: true
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.awt.printerjob: sun.print.PSPrinterJob
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.path: bin/../conf:bin/../lib/score-client.jar
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.class.version: 55.0
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.home: /usr/lib/jvm/jdk-11
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.io.tmpdir: /tmp
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.protocol.handler.pkgs: org.springframework.boot.loader
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.name: OpenJDK Runtime Environment
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.runtime.version: 11+28
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.name: Java Platform API Specification
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.vendor: Oracle Corporation
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.specification.version: 11
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor: Oracle Corporation
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url: http://java.oracle.com/
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.url.bug: http://bugreport.java.com/bugreport/
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vendor.version: 18.9
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version: 11
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.version.date: 2018-09-25
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.compressedOopsMode: Zero based
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.info: mixed mode
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.name: OpenJDK 64-Bit Server VM
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.name: Java Virtual Machine Specification
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.vendor: Oracle Corporation
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.specification.version: 11
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.vendor: Oracle Corporation
+2020-03-30 13:14:17,385 [main] INFO  b.o.s.c.c.ClientBanner -             - java.vm.version: 11+28
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - jdk.debug: release
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - jline.terminal: jline.UnsupportedTerminal
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - line.separator: 
+
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.config: /score-client/conf/logback.xml
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.path: bin/../logs
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - os.arch: amd64
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - os.name: Linux
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - os.version: 4.15.0-54-generic
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - path.separator: :
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.beaninfo.ignore: true
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.config.additional-location: /score-client/conf/
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.profile: aws
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.arch.data.model: 64
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.boot.library.path: /usr/lib/jvm/jdk-11/lib
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.endian: little
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.cpu.isalist: 
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.io.unicode.encoding: UnicodeLittle
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.command: org.springframework.boot.loader.JarLauncher upload --manifest /song-client/output/manifest.txt --force
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.java.launcher: SUN_STANDARD
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.jnu.encoding: ANSI_X3.4-1968
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.management.compiler: HotSpot 64-Bit Tiered Compilers
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultConnectTimeout: 60000
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.net.client.defaultReadTimeout: 60000
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - sun.os.patch.level: unknown
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - user.country: US
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - user.dir: /score-client
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - user.home: /root
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - user.language: en
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - user.name: root
+2020-03-30 13:14:17,386 [main] INFO  b.o.s.c.c.ClientBanner -             - user.timezone: GMT
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #1):
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://virginia.song.icgc.org
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - spring.profiles: aws
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: https://virginia.cloud.icgc.org
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -          applicationConfig: [classpath:/application.yml] (document #0):
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - client.accessToken: ${accessToken:}
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ansi: ${ansi:true}
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - client.connectTimeoutSeconds: 60
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - client.quiet: ${quiet:false}
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - client.readTimeoutSeconds: 60
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - client.silent: ${silent:false}
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - client.ssl.custom: false
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.expiration: 86400
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.partSize: 1073741824
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.download.url: https://data.kidsfirstdrc.org
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - kf.token.url: https://v2i1r42t6d.execute-api.us-east-1.amazonaws.com/beta/token
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - kfportal.url: https://arranger.kids-first.io/june_13/graphql
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - logging.file: target/logs/client.log
+2020-03-30 13:14:17,387 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.ssl.enabled: true
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - metadata.url: https://song.cancercollaboratory.org
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - mount.logging: false
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - portal.url: https://dcc.icgc.org
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryNumber: 10
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.retryTimeout: 1
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - storage.url: http://localhost:5431
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - token.public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlvqX7PDezX7BC0yc14zwJw2qgs5KDyZZvEeNowHCgHLcCtCVZ2JIx+ccUPp1FVudfZpLoboZ3RjT+6oOPHpNilXqUZfT81acCVHhvyJe7FNxdUWKpIIVKM/8bJj1pVkst0YHLBJ3KojZYJCMNUxUkyHM+yGrn9tmSdFBmwJnBLTkSxOrS2bvuZvkjERnoQJCoTm2XBKoCOzEuVPjIeB2KiFcNqiZwhjnCSQGPmg7fyJfQt1vMl+8RST3IXxphf8KKaWMl0rTXQhIHYL23P/tvC2lpJgx0rzgnxkAgFSrCxLstIklFAAg+j7ykivOyynIlCfXGv4cPTq5UqvIB8MBRQIDAQAB
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.fileFrom: memory
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.memory: 1
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner -             - transport.parallel: 6
+2020-03-30 13:14:17,388 [main] INFO  b.o.s.c.c.ClientBanner - ----------------------------------------------------------------------------------------------------
+
+
+2020-03-30 13:14:17,414 [main] INFO  b.o.s.c.ClientMain - Started ClientMain in 1.506 seconds (JVM running for 2.196)
+2020-03-30 13:14:22,591 [main] ERROR b.o.s.c.s.s.ScoreStorageService - Unable to connect to repository endpoint. Verify your network connection. You also need to be running on a compute node within the repository cloud.
+2020-03-30 13:14:22,597 [main] ERROR b.o.s.c.ClientMain - Unknown error: 
+bio.overture.score.client.exception.NotRetryableException: java.io.IOException: Access refused by repository. Ensure client is running as part of repository cloud.
+	at bio.overture.score.client.storage.score.ScoreStorageService.ping(ScoreStorageService.java:307)
+	at bio.overture.score.client.command.RepositoryAccessCommand.verifyRepoConnection(RepositoryAccessCommand.java:32)
+	at bio.overture.score.client.command.UploadCommand.execute(UploadCommand.java:76)
+	at bio.overture.score.client.ClientMain.run(ClientMain.java:133)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:779)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:763)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:139)
+	at bio.overture.score.client.ClientMain.main(ClientMain.java:106)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:47)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:86)
+	at org.springframework.boot.loader.Launcher.launch(Launcher.java:50)
+	at org.springframework.boot.loader.JarLauncher.main(JarLauncher.java:51)
+Caused by: java.io.IOException: Access refused by repository. Ensure client is running as part of repository cloud.
+	... 17 common frames omitted

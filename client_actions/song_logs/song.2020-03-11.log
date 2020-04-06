@@ -1,0 +1,29 @@
+2020-03-11 15:13:46,993 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 15:14:03,997 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 15:46:33,489 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 15:46:44,652 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 15:47:37,283 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 15:49:39,900 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 15:51:24,204 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 16:03:40,512 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 16:06:35,944 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 16:06:35,966 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 16:06:35,966 [main] ERROR b.o.s.c.c.ClientMain - ************************************************************
+*                    SONG CLIENT ERROR                     *
+************************************************************
+The SONG server may not be running on 'https://84.88.186.194/song_eucancan_bsc'
+2020-03-11 16:06:35,966 [main] ERROR b.o.s.c.c.ClientMain - ************************************************************
+*                    SONG CLIENT ERROR                     *
+************************************************************
+The SONG server may not be running on 'https://84.88.186.194/song_eucancan_bsc'
+2020-03-11 16:09:06,351 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 16:09:06,379 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
+2020-03-11 16:09:06,379 [main] ERROR b.o.s.c.c.ClientMain - ************************************************************
+*                    SONG CLIENT ERROR                     *
+************************************************************
+The SONG server may not be running on 'https://84.88.186.194/song_eucancan_bsc'
+2020-03-11 16:09:06,379 [main] ERROR b.o.s.c.c.ClientMain - ************************************************************
+*                    SONG CLIENT ERROR                     *
+************************************************************
+The SONG server may not be running on 'https://84.88.186.194/song_eucancan_bsc'
+2020-03-11 16:10:31,156 [main] INFO  b.o.s.c.r.DefaultRetryListener - Detected a connection exception, but it's not the connection timeoutMs or 503 Service Unavailable. Do not retry.
